@@ -95,19 +95,19 @@
 
     switch (address.mSelector) {
         case kCMIOObjectPropertyName:
-            *static_cast<CFStringRef*>(data) = CFSTR("CMIOMinimalSample Device");
+            *static_cast<CFStringRef*>(data) = CFSTR("Highwaycam");
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIOObjectPropertyManufacturer:
-            *static_cast<CFStringRef*>(data) = CFSTR("johnboiles");
+            *static_cast<CFStringRef*>(data) = CFSTR("42yeah");
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIOObjectPropertyElementCategoryName:
-            *static_cast<CFStringRef*>(data) = CFSTR("catname");
+            *static_cast<CFStringRef*>(data) = CFSTR("astr");
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIOObjectPropertyElementNumberName:
-            *static_cast<CFStringRef*>(data) = CFSTR("element number name");
+            *static_cast<CFStringRef*>(data) = CFSTR("#ERROR");
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIODevicePropertyPlugIn:
@@ -115,11 +115,11 @@
             *dataUsed = sizeof(CMIOObjectID);
             break;
         case kCMIODevicePropertyDeviceUID:
-            *static_cast<CFStringRef*>(data) = CFSTR("CMIO Simple Device");
+            *static_cast<CFStringRef*>(data) = CFSTR("0x1440000001a00001");
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIODevicePropertyModelUID:
-            *static_cast<CFStringRef*>(data) = CFSTR("CMIO Simple Model");
+            *static_cast<CFStringRef*>(data) = CFSTR("UVC Camera HighwayCam_1234 ProductID_23456");
             *dataUsed = sizeof(CFStringRef);
             break;
         case kCMIODevicePropertyTransportType:

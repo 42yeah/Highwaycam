@@ -10,12 +10,12 @@
 #include "program.hpp"
 
 
-App::App(GLFWwindow *window) : window(window), time(0.0f) {
+App::App(GLFWwindow *window) : window(window), time(0.0f), server(this) {
     update();
     frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
     frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
     lastInstant = glfwGetTime();
-    doInvert = false;
+    server.start();
 }
 
 void App::update() {
@@ -27,6 +27,8 @@ void App::update() {
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
     winSize = { (float) w, (float) h };
+    
+    server.respond();
 }
 
 void App::renderGUI() {
@@ -34,7 +36,7 @@ void App::renderGUI() {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-    
+
     if (warnings.size() > 0) {
         configWindow({ 300.0f, 500.0f }, { 10.0f, 10.0f }, true);
         ImGui::Begin("Warnings");
@@ -94,11 +96,11 @@ void App::start() {
 }
 
 void App::configWindow(glm::vec2 size, glm::vec2 pos, bool inverse) {
-    ImGui::SetNextWindowSize({ size.x, size.y });
+    ImGui::SetNextWindowSize({ size.x, size.y }, ImGuiCond_FirstUseEver);
     glm::vec2 rpos = pos;
     if (inverse) {
         rpos = winSize / 2.0f - size - rpos;
     }
-    ImGui::SetNextWindowPos({ rpos.x, rpos.y });
+    ImGui::SetNextWindowPos({ rpos.x, rpos.y }, ImGuiCond_FirstUseEver);
 }
 

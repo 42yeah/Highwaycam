@@ -33,6 +33,7 @@
 		F16DB4C5247FFD3C00DFE70C /* program.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F16DB4C3247FFD3C00DFE70C /* program.cpp */; };
 		F16DB4C8247FFDDD00DFE70C /* app.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F16DB4C6247FFDDD00DFE70C /* app.cpp */; };
 		F16DB4CF248003B200DFE70C /* frame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F16DB4CD248003B200DFE70C /* frame.cpp */; };
+		F16DB4D42480161E00DFE70C /* server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F16DB4D22480161E00DFE70C /* server.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -296,6 +297,8 @@
 		F16DB4CD248003B200DFE70C /* frame.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = frame.cpp; sourceTree = "<group>"; };
 		F16DB4CE248003B200DFE70C /* frame.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = frame.hpp; sourceTree = "<group>"; };
 		F16DB4D024800E3900DFE70C /* invert.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = invert.glsl; sourceTree = "<group>"; };
+		F16DB4D22480161E00DFE70C /* server.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = server.cpp; sourceTree = "<group>"; };
+		F16DB4D32480161E00DFE70C /* server.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = server.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -390,6 +393,8 @@
 				F16DB4C7247FFDDD00DFE70C /* app.hpp */,
 				F16DB4CD248003B200DFE70C /* frame.cpp */,
 				F16DB4CE248003B200DFE70C /* frame.hpp */,
+				F16DB4D22480161E00DFE70C /* server.cpp */,
+				F16DB4D32480161E00DFE70C /* server.hpp */,
 			);
 			path = Highwaycam;
 			sourceTree = "<group>";
@@ -1161,6 +1166,7 @@
 				F16DB4C0247FFB9A00DFE70C /* imgui_impl_opengl3.cpp in Sources */,
 				F16DB4BF247FFB9000DFE70C /* imgui_stdlib.cpp in Sources */,
 				F16DB4BE247FFB8800DFE70C /* glad.c in Sources */,
+				F16DB4D42480161E00DFE70C /* server.cpp in Sources */,
 				F16DB4CF248003B200DFE70C /* frame.cpp in Sources */,
 				F16DB4BD247FFB7200DFE70C /* imgui.cpp in Sources */,
 				F16DB4C8247FFDDD00DFE70C /* app.cpp in Sources */,

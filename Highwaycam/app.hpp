@@ -9,6 +9,8 @@
 #ifndef app_hpp
 #define app_hpp
 
+#define PORT 31256
+
 #include <iostream>
 #include <vector>
 #include <glad/glad.h>
@@ -20,6 +22,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include "frame.hpp"
+#include "server.hpp"
 
 
 class App {
@@ -40,7 +43,7 @@ public:
     float time, lastInstant, deltaTime;
 
     std::vector<std::pair<bool, Frame>> frames;
-    bool doInvert;
+    Server server;
     
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false);
