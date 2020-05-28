@@ -9,6 +9,7 @@
 #ifndef frame_hpp
 #define frame_hpp
 
+#include <iostream>
 #include <map>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
@@ -19,9 +20,9 @@ class App;
 class Frame {
 public:
     Frame() {}
-    Frame(App *app, std::string fpath);
+    Frame(App *app, std::string name, std::string fpath);
     
-    void init(App *app, std::string fpath);
+    void init(App *app, std::string name, std::string fpath);
     
     void renderToScreen();
     void render();
@@ -35,6 +36,7 @@ public:
     glm::vec2 size;
     GLuint prevPass;
     App *app;
+    std::string name;
 };
 
 #endif /* frame_hpp */

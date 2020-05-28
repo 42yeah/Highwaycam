@@ -12,9 +12,10 @@
 
 App::App(GLFWwindow *window) : window(window), time(0.0f) {
     update();
-    defaultFrame.init(this, "Shaders/fragment.glsl");
-    invertFrame.init(this, "Shaders/invert.glsl");
+    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
+    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
     lastInstant = glfwGetTime();
+    doInvert = false;
 }
 
 void App::update() {
@@ -47,6 +48,12 @@ void App::renderGUI() {
         }
         ImGui::End();
     }
+    configWindow({ 400.0f, 200.0f }, { 10.0f, 10.0f });
+    ImGui::Begin("Passes");
+    for (int i = 0; i < frames.size(); i++) {
+        ImGui::Checkbox(frames[i].second.name.c_str(), &frames[i].first);
+    }
+    ImGui::End();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
@@ -57,7 +64,18 @@ void App::mainLoop() {
         glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         update();
-        defaultFrame.chain(invertFrame).renderToScreen();
+        Frame *currentFrame = nullptr;
+        for (int i = 0; i < frames.size(); i++) {
+            if (!frames[i].first) { continue; }
+            if (!currentFrame) {
+                currentFrame = &frames[i].second;
+                continue;
+            }
+            currentFrame = &(currentFrame->chain(frames[i].second));
+        }
+        if (currentFrame) {
+            currentFrame->renderToScreen();
+        }
         renderGUI();
         glfwSwapBuffers(window);
     }

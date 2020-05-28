@@ -8,6 +8,6 @@ uniform sampler2D prevPass;
 out vec4 color;
 
 void main() {
-    color = texture(prevPass, uv);
+    color = 1.0 - texture(prevPass, uv);
 }
 

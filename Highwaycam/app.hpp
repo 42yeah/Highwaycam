@@ -38,8 +38,9 @@ public:
     GLFWwindow *window;
     std::vector<std::string> warnings;
     float time, lastInstant, deltaTime;
-    
-    Frame defaultFrame, invertFrame;
+
+    std::vector<std::pair<bool, Frame>> frames;
+    bool doInvert;
     
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false);

@@ -11,8 +11,8 @@
 #include "program.hpp"
 
 
-Frame::Frame(App *app, std::string fpath) {
-    init(app, fpath);
+Frame::Frame(App *app, std::string name, std::string fpath) {
+    init(app, name, fpath);
 }
 
 void Frame::renderToScreen() {
@@ -47,9 +47,10 @@ GLuint Frame::uniform(std::string name) {
     return uniforms[name];
 }
 
-void Frame::init(App *app, std::string fpath) {
+void Frame::init(App *app, std::string name, std::string fpath) {
     this->app = app;
     this->prevPass = 0;
+    this->name = name;
     program = link(app, "Shaders/vertex.glsl", fpath);
     
     float buf[] = {
