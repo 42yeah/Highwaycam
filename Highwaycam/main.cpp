@@ -21,5 +21,6 @@ int main(int argc, const char * argv[]) {
     
     App app(window);
     app.start();
+    app.quit();
     return 0;
 }

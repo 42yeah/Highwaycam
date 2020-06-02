@@ -38,6 +38,8 @@ public:
     
     void start();
     
+    void quit();
+    
     void updateFinalImageBuffer();
     
     glm::vec2 winSize;
@@ -47,10 +49,10 @@ public:
 
     std::vector<std::pair<bool, Frame>> frames;
     Server server;
-    unsigned char *finalImageBuffer;
+    std::pair<int, unsigned char *> finalImageBuffer;
     
 private:
-    void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false);
+    void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false, bool collapsed = false);
 };
 
 #endif /* app_hpp */

@@ -16,8 +16,8 @@ App::App(GLFWwindow *window) : window(window), time(0.0f), server(this) {
     frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
     lastInstant = glfwGetTime();
     server.start();
-    int size = (int) winSize.x * (int) winSize.y * 24;
-    finalImageBuffer = new unsigned char[size]; // RGB * W * H
+    finalImageBuffer.first = (int) winSize.x * (int) winSize.y * 24;
+    finalImageBuffer.second = new unsigned char[finalImageBuffer.first]; // RGB * W * H
 }
 
 void App::update() {
@@ -56,6 +56,16 @@ void App::renderGUI() {
     ImGui::Begin("Passes");
     for (int i = 0; i < frames.size(); i++) {
         ImGui::Checkbox(frames[i].second.name.c_str(), &frames[i].first);
+    }
+    ImGui::End();
+    
+    configWindow({ 150.0f, 70.0f }, { 10.0f, 220.0f }, false, true);
+    ImGui::Begin("Export");
+    if (ImGui::Button("Export to file")) {
+        std::ofstream result("result.ppm");
+        result << "P6" << std::endl << (int) winSize.x << " " << (int) winSize.y << std::endl << 255 << std::endl;
+        result.write((char *) finalImageBuffer.second, finalImageBuffer.first);
+        result.close();
     }
     ImGui::End();
 
@@ -98,12 +108,13 @@ void App::start() {
     mainLoop();
 }
 
-void App::configWindow(glm::vec2 size, glm::vec2 pos, bool inverse) {
+void App::configWindow(glm::vec2 size, glm::vec2 pos, bool inverse, bool collapsed) {
     ImGui::SetNextWindowSize({ size.x, size.y }, ImGuiCond_FirstUseEver);
     glm::vec2 rpos = pos;
     if (inverse) {
         rpos = winSize / RETINA_MODIFIER - size - rpos;
     }
+    ImGui::SetNextWindowCollapsed(collapsed, ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos({ rpos.x, rpos.y }, ImGuiCond_FirstUseEver);
 }
 
@@ -122,6 +133,10 @@ void App::updateFinalImageBuffer() {
     latest->render();
 //    int size = (int) latest->size.x * (int) latest->size.y * 24 * 4;
     glBindTexture(GL_TEXTURE_2D, latest->texture);
-    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, finalImageBuffer);
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, finalImageBuffer.second);
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void App::quit() {
+    delete[] finalImageBuffer.second;
 }
