@@ -16,6 +16,8 @@ App::App(GLFWwindow *window) : window(window), time(0.0f), server(this) {
     frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
     lastInstant = glfwGetTime();
     server.start();
+    int size = (int) winSize.x * (int) winSize.y * 24;
+    finalImageBuffer = new unsigned char[size]; // RGB * W * H
 }
 
 void App::update() {
@@ -26,7 +28,7 @@ void App::update() {
 
     int w, h;
     glfwGetFramebufferSize(window, &w, &h);
-    winSize = { (float) w, (float) h };
+    winSize = { (float) w / RETINA_MODIFIER, (float) h / RETINA_MODIFIER };
     
     server.respond();
 }
@@ -79,6 +81,7 @@ void App::mainLoop() {
             currentFrame->renderToScreen();
         }
         renderGUI();
+        updateFinalImageBuffer();
         glfwSwapBuffers(window);
     }
 }
@@ -99,8 +102,26 @@ void App::configWindow(glm::vec2 size, glm::vec2 pos, bool inverse) {
     ImGui::SetNextWindowSize({ size.x, size.y }, ImGuiCond_FirstUseEver);
     glm::vec2 rpos = pos;
     if (inverse) {
-        rpos = winSize / 2.0f - size - rpos;
+        rpos = winSize / RETINA_MODIFIER - size - rpos;
     }
     ImGui::SetNextWindowPos({ rpos.x, rpos.y }, ImGuiCond_FirstUseEver);
 }
 
+void App::updateFinalImageBuffer() {
+    Frame *latest = nullptr;
+    int latestIndex = -1;
+    for (int i = 0; i < frames.size(); i++) {
+        if (frames[i].first && i > latestIndex) {
+            latest = &frames[i].second;
+            latestIndex = i;
+        }
+    }
+    if (!latest) {
+        return;
+    }
+    latest->render();
+//    int size = (int) latest->size.x * (int) latest->size.y * 24 * 4;
+    glBindTexture(GL_TEXTURE_2D, latest->texture);
+    glGetTexImage(GL_TEXTURE_2D, 0, GL_RGB, GL_UNSIGNED_BYTE, finalImageBuffer);
+    glBindTexture(GL_TEXTURE_2D, 0);
+}

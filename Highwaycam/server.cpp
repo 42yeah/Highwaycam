@@ -40,6 +40,5 @@ void Server::respond() {
         char data[512] = { 0 };
         ssize_t len = recvfrom(sock, data, sizeof(data), 0, (sockaddr *) &sin, &slen);
         if (len <= 0) { return; }
-        app->warnings.push_back("New message received from server: " + std::string(data));
     }
 }

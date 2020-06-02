@@ -34,7 +34,7 @@ void Frame::renderToScreen() {
 void Frame::render() {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     glClear(GL_COLOR_BUFFER_BIT);
-    glViewport(0, 0, size.x, size.y);
+    glViewport(0, 0, size.x * RETINA_MODIFIER, size.y * RETINA_MODIFIER);
     renderToScreen();
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }

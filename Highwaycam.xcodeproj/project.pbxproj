@@ -1313,7 +1313,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 73G2KN78GM;
+				DEVELOPMENT_TEAM = KL2JALR869;
 				INFOPLIST_FILE = Camera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnboiles.CMIOMinimalSample;
@@ -1328,7 +1328,7 @@
 			buildSettings = {
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = 73G2KN78GM;
+				DEVELOPMENT_TEAM = KL2JALR869;
 				INFOPLIST_FILE = Camera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
 				PRODUCT_BUNDLE_IDENTIFIER = com.johnboiles.CMIOMinimalSample;

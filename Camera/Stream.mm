@@ -17,11 +17,16 @@
 //  You should have received a copy of the GNU General Public License
 //  along with CMIOMinimalSample. If not, see <http://www.gnu.org/licenses/>.
 
+#define PORT 31256
+
 #import "Stream.h"
 
 #import <AppKit/AppKit.h>
 #import <mach/mach_time.h>
 #include <CoreMediaIO/CMIOSampleBuffer.h>
+#include <sys/socket.h>
+#include <arpa/inet.h>
+#include <netinet/in.h>
 
 #import "Logging.h"
 
@@ -30,6 +35,7 @@
     CFTypeRef _clock;
     NSImage *_testImage;
     dispatch_source_t _frameDispatchSource;
+    int _sock;
 }
 
 @property CMIODeviceStreamQueueAlteredProc alteredProc;
@@ -44,6 +50,18 @@
 @implementation Stream
 
 #define FPS 30.0
+
+- (bool) testUDPMessage {
+    _sock = socket(AF_INET, SOCK_DGRAM, 0);
+    struct sockaddr_in sin;
+    sin.sin_addr.s_addr = 16777343;
+    sin.sin_port = htons(PORT);
+    sin.sin_family = AF_INET;
+    char hello[512] = "Hello world from fake camera!";
+
+    sendto(_sock, hello, strlen(hello), 0, (struct sockaddr *) &sin, sizeof(sin));
+    return true;
+}
 
 - (instancetype _Nonnull)init {
     self = [super init];
@@ -168,6 +186,7 @@
         DLog(@"Queue is full, bailing out");
         return;
     }
+    [self testUDPMessage];
 
     CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
 

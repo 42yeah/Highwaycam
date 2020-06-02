@@ -10,6 +10,7 @@
 #define app_hpp
 
 #define PORT 31256
+#define RETINA_MODIFIER 2.0f
 
 #include <iostream>
 #include <vector>
@@ -37,6 +38,8 @@ public:
     
     void start();
     
+    void updateFinalImageBuffer();
+    
     glm::vec2 winSize;
     GLFWwindow *window;
     std::vector<std::string> warnings;
@@ -44,6 +47,7 @@ public:
 
     std::vector<std::pair<bool, Frame>> frames;
     Server server;
+    unsigned char *finalImageBuffer;
     
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false);
