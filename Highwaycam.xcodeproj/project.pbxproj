@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		18AA36D42487A735004839BC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18AA36D32487A735004839BC /* main.cpp */; };
 		2930F4DE2441626200403930 /* Device.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2930F4DD2441626200403930 /* Device.mm */; };
 		2930F4E124417F7E00403930 /* ObjectStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2930F4E024417F7E00403930 /* ObjectStore.mm */; };
 		2930F4E4244182FD00403930 /* Stream.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2930F4E3244182FD00403930 /* Stream.mm */; };
@@ -61,6 +62,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		18AA36CF2487A735004839BC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = /usr/share/man/man1/;
+			dstSubfolderSpec = 0;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 1;
+		};
 		F16DB3B7247FFA5900DFE70C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -85,6 +95,9 @@
 
 /* Begin PBXFileReference section */
 		18AA36792487A3E3004839BC /* ipc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ipc.h; sourceTree = "<group>"; };
+		18AA36D12487A735004839BC /* IPCTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IPCTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		18AA36D32487A735004839BC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		18CC4FBC2487AC9600B63B28 /* Camera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Camera.entitlements; sourceTree = "<group>"; };
 		2930F4DC2441626200403930 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		2930F4DD2441626200403930 /* Device.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Device.mm; sourceTree = "<group>"; };
 		2930F4DF24417F7E00403930 /* ObjectStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectStore.h; sourceTree = "<group>"; };
@@ -303,6 +316,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		18AA36CE2487A735004839BC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		29F2120124402B9300805A6D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -327,6 +347,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		18AA36D22487A735004839BC /* IPCTest */ = {
+			isa = PBXGroup;
+			children = (
+				18AA36D32487A735004839BC /* main.cpp */,
+			);
+			path = IPCTest;
+			sourceTree = "<group>";
+		};
 		29F211FB24402B9300805A6D = {
 			isa = PBXGroup;
 			children = (
@@ -335,6 +363,7 @@
 				F16DB3C6247FFB3A00DFE70C /* Ext */,
 				29F2120624402B9300805A6D /* Camera */,
 				F16DB3BA247FFA5900DFE70C /* Highwaycam */,
+				18AA36D22487A735004839BC /* IPCTest */,
 				29F2120524402B9300805A6D /* Products */,
 				29F21210244031C300805A6D /* Frameworks */,
 			);
@@ -345,6 +374,7 @@
 			children = (
 				29F2120424402B9300805A6D /* Camera.plugin */,
 				F16DB3B9247FFA5900DFE70C /* Highwaycam */,
+				18AA36D12487A735004839BC /* IPCTest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -352,6 +382,7 @@
 		29F2120624402B9300805A6D /* Camera */ = {
 			isa = PBXGroup;
 			children = (
+				18CC4FBC2487AC9600B63B28 /* Camera.entitlements */,
 				29F2120724402B9300805A6D /* Info.plist */,
 				29E38E5F244AC84900153404 /* README.md */,
 				2930F4E52441998900403930 /* Logging.h */,
@@ -1009,6 +1040,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		18AA36D02487A735004839BC /* IPCTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 18AA36D52487A735004839BC /* Build configuration list for PBXNativeTarget "IPCTest" */;
+			buildPhases = (
+				18AA36CD2487A735004839BC /* Sources */,
+				18AA36CE2487A735004839BC /* Frameworks */,
+				18AA36CF2487A735004839BC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = IPCTest;
+			productName = IPCTest;
+			productReference = 18AA36D12487A735004839BC /* IPCTest */;
+			productType = "com.apple.product-type.tool";
+		};
 		29F2120324402B9300805A6D /* Camera */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 29F2120A24402B9300805A6D /* Build configuration list for PBXNativeTarget "Camera" */;
@@ -1051,9 +1099,13 @@
 		29F211FC24402B9300805A6D /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 1150;
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "John Boiles ";
 				TargetAttributes = {
+					18AA36D02487A735004839BC = {
+						CreatedOnToolsVersion = 11.5;
+					};
 					29F2120324402B9300805A6D = {
 						CreatedOnToolsVersion = 11.4;
 					};
@@ -1087,6 +1139,7 @@
 			targets = (
 				29F2120324402B9300805A6D /* Camera */,
 				F16DB3B8247FFA5900DFE70C /* Highwaycam */,
+				18AA36D02487A735004839BC /* IPCTest */,
 			);
 		};
 /* End PBXProject section */
@@ -1146,6 +1199,14 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		18AA36CD2487A735004839BC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				18AA36D42487A735004839BC /* main.cpp in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		29F2120024402B9300805A6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1201,6 +1262,30 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		18AA36D62487A735004839BC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KL2JALR869;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
+				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.ipctest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		18AA36D72487A735004839BC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KL2JALR869;
+				ENABLE_HARDENED_RUNTIME = YES;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
+				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.ipctest;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		29F2120824402B9300805A6D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -1313,12 +1398,14 @@
 		29F2120B24402B9300805A6D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Camera/Camera.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KL2JALR869;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
 				INFOPLIST_FILE = Camera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnboiles.CMIOMinimalSample;
+				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.cmiom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = plugin;
@@ -1328,12 +1415,14 @@
 		29F2120C24402B9300805A6D /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Camera/Camera.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEVELOPMENT_TEAM = KL2JALR869;
+				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
 				INFOPLIST_FILE = Camera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
-				PRODUCT_BUNDLE_IDENTIFIER = com.johnboiles.CMIOMinimalSample;
+				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.cmiom;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
 				WRAPPER_EXTENSION = plugin;
@@ -1343,7 +1432,10 @@
 		F16DB3BE247FFA5900DFE70C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KL2JALR869;
+				ENABLE_HARDENED_RUNTIME = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/glfw/3.3.2/include,
 					"$(SRCROOT)/Ext/glad/include",
@@ -1352,6 +1444,7 @@
 					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/glfw/3.3.2/lib;
+				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.highwaycam;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -1359,7 +1452,10 @@
 		F16DB3BF247FFA5900DFE70C /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KL2JALR869;
+				ENABLE_HARDENED_RUNTIME = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/glfw/3.3.2/include,
 					"$(SRCROOT)/Ext/glad/include",
@@ -1368,6 +1464,7 @@
 					/usr/local/include,
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/glfw/3.3.2/lib;
+				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.highwaycam;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1375,6 +1472,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		18AA36D52487A735004839BC /* Build configuration list for PBXNativeTarget "IPCTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				18AA36D62487A735004839BC /* Debug */,
+				18AA36D72487A735004839BC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		29F211FF24402B9300805A6D /* Build configuration list for PBXProject "Highwaycam" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

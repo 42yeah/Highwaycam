@@ -198,9 +198,8 @@ static char * ipc_strdup(char *src)
     for (i = 0; i < len; i++)
         dst[i] = src[i];
 #else
-    dst[0] = '/';
-    for (i = 0; i < len-1; i++)
-        dst[i+1] = src[i];
+    for (i = 0; i < len; i++)
+        dst[i] = src[i];
 #endif
     return dst;
 }

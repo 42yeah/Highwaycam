@@ -27,6 +27,8 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#define IPC_IMPLEMENTATION
+#include <ipc.h>
 
 #import "Logging.h"
 
@@ -78,6 +80,13 @@
             [wself fillFrame];
         });
     }
+    
+    char name[] = "me.42yeah/shared";
+    ipc_sharedmemory memory;
+    ipc_mem_init(&memory, name, 1024);
+    ipc_mem_create(&memory);
+    DLog(@"Creation success? %d, %s, %d", errno, memory.name, memory.data == NULL);
+    ipc_mem_close(&memory);
     return self;
 }
 
