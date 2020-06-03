@@ -34,11 +34,24 @@ void Server::respond() {
     FD_ZERO(&set);
     FD_SET(sock, &set);
     int count = select(sock + 1, &set, nullptr, nullptr, &time);
+
+    char expected[] = "frame";
+    const int mtu = 1024;
+
     if (count > 0) {
         sockaddr_in sin;
         socklen_t slen = sizeof(sin);
         char data[512] = { 0 };
         ssize_t len = recvfrom(sock, data, sizeof(data), 0, (sockaddr *) &sin, &slen);
         if (len <= 0) { return; }
+        
+        // CMP && ACK
+//        app->warnings.push_back("buffer: " + std::string(data) + " cmp: " + std::to_string(memcmp(expected, data, sizeof(expected) - 1)));
+        if (memcmp(expected, data, sizeof(expected) - 1) == 0) {
+            for (int i = 0; i < app->finalImageBuffer.first; i += mtu) {
+                sendto(sock, app->finalImageBuffer.second + i, glm::min(app->finalImageBuffer.first - i, mtu), 0, (sockaddr *) &sin, slen);
+                app->warnings.push_back("sending from " + std::to_string(i) + " to " + std::to_string(glm::min(app->finalImageBuffer.first - i, mtu)));
+            }
+        }
     }
 }

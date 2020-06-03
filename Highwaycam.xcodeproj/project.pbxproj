@@ -84,6 +84,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		18AA36792487A3E3004839BC /* ipc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ipc.h; sourceTree = "<group>"; };
 		2930F4DC2441626200403930 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		2930F4DD2441626200403930 /* Device.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Device.mm; sourceTree = "<group>"; };
 		2930F4DF24417F7E00403930 /* ObjectStore.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ObjectStore.h; sourceTree = "<group>"; };
@@ -402,6 +403,7 @@
 		F16DB3C6247FFB3A00DFE70C /* Ext */ = {
 			isa = PBXGroup;
 			children = (
+				18AA36792487A3E3004839BC /* ipc.h */,
 				F16DB3C7247FFB3A00DFE70C /* imgui */,
 				F16DB4A9247FFB3A00DFE70C /* glad */,
 			);

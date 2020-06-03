@@ -112,7 +112,7 @@ void App::configWindow(glm::vec2 size, glm::vec2 pos, bool inverse, bool collaps
     ImGui::SetNextWindowSize({ size.x, size.y }, ImGuiCond_FirstUseEver);
     glm::vec2 rpos = pos;
     if (inverse) {
-        rpos = winSize / RETINA_MODIFIER - size - rpos;
+        rpos = winSize - size - rpos;
     }
     ImGui::SetNextWindowCollapsed(collapsed, ImGuiCond_FirstUseEver);
     ImGui::SetNextWindowPos({ rpos.x, rpos.y }, ImGuiCond_FirstUseEver);
