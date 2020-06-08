@@ -9,11 +9,12 @@
 #ifndef app_hpp
 #define app_hpp
 
-#define PORT 31256
+#define PORT 31255
 #define RETINA_MODIFIER 2.0f
 
 #include <iostream>
 #include <vector>
+#include <sstream>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <imgui.h>
@@ -42,6 +43,8 @@ public:
     
     void updateFinalImageBuffer();
     
+    void updateCompressionStream();
+    
     glm::vec2 winSize;
     GLFWwindow *window;
     std::vector<std::string> warnings;
@@ -50,7 +53,10 @@ public:
     std::vector<std::pair<bool, Frame>> frames;
     Server server;
     std::pair<int, unsigned char *> finalImageBuffer;
-    
+
+    std::stringstream compressionStream;
+    int compressQuality;
+
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false, bool collapsed = false);
 };

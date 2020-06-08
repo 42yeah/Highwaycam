@@ -8,9 +8,11 @@
 
 #include "app.hpp"
 #include "program.hpp"
+#define STB_IMAGE_WRITE_IMPLEMENTATION
+#include <stb_image_write.h>
 
 
-App::App(GLFWwindow *window) : window(window), time(0.0f), server(this) {
+App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50) {
     update();
     frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
     frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
@@ -61,16 +63,35 @@ void App::renderGUI() {
     
     configWindow({ 150.0f, 70.0f }, { 10.0f, 220.0f }, false, true);
     ImGui::Begin("Export");
-    if (ImGui::Button("Export to file")) {
+    if (ImGui::Button("Export to PPM")) {
         std::ofstream result("result.ppm");
         result << "P6" << std::endl << (int) winSize.x << " " << (int) winSize.y << std::endl << 255 << std::endl;
         result.write((char *) finalImageBuffer.second, finalImageBuffer.first);
         result.close();
     }
+    if (ImGui::Button("Export to JPEG")) {
+        updateCompressionStream();
+        std::ofstream result("result.jpg");
+        result << compressionStream.rdbuf();
+        result.close();
+    }
+    ImGui::End();
+    
+    configWindow({ 400.0f, 300.0f }, { 10.0f, 240.0f }, false, true);
+    ImGui::Begin("Stream settings");
+    ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::End();
 
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+void App::updateCompressionStream() {
+    compressionStream.str("");
+    stbi_write_jpg_to_func([](void *ctx, void *data, int size) {
+        App *thiz = (App *) ctx;
+        thiz->compressionStream.write((char *) data, size);
+    }, this, winSize.x, winSize.y, 3, finalImageBuffer.second, compressQuality);
 }
 
 void App::mainLoop() {
@@ -139,4 +160,5 @@ void App::updateFinalImageBuffer() {
 
 void App::quit() {
     delete[] finalImageBuffer.second;
+    server.stop();
 }

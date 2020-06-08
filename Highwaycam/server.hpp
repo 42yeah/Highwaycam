@@ -14,6 +14,7 @@
 #include <netinet/in.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <vector>
 
 class App;
 
@@ -26,9 +27,12 @@ public:
     
     void respond();
     
+    void stop();
+    
     App *app;
     int sock;
     timeval time;
+    std::vector<int> connections;
 };
 
 #endif /* server_hpp */

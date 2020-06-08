@@ -119,6 +119,8 @@
 		29F2123624406AF200805A6D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		29F2123824406AF800805A6D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29F2123A24406B0300805A6D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		F110610A248E078A00A9380F /* stb_image_write.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
+		F110610B248E078A00A9380F /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		F16DB3B9247FFA5900DFE70C /* Highwaycam */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Highwaycam; sourceTree = BUILT_PRODUCTS_DIR; };
 		F16DB3BB247FFA5900DFE70C /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		F16DB3C2247FFB1E00DFE70C /* libglfw.3.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libglfw.3.3.dylib; path = ../../../../../usr/local/Cellar/glfw/3.3.2/lib/libglfw.3.3.dylib; sourceTree = "<group>"; };
@@ -434,6 +436,8 @@
 		F16DB3C6247FFB3A00DFE70C /* Ext */ = {
 			isa = PBXGroup;
 			children = (
+				F110610A248E078A00A9380F /* stb_image_write.h */,
+				F110610B248E078A00A9380F /* stb_image.h */,
 				18AA36792487A3E3004839BC /* ipc.h */,
 				F16DB3C7247FFB3A00DFE70C /* imgui */,
 				F16DB4A9247FFB3A00DFE70C /* glad */,
@@ -1401,7 +1405,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Camera/Camera.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = KL2JALR869;
+				DEVELOPMENT_TEAM = 73G2KN78GM;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
 				INFOPLIST_FILE = Camera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -1418,7 +1422,7 @@
 				CODE_SIGN_ENTITLEMENTS = "$(SRCROOT)/Camera/Camera.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
-				DEVELOPMENT_TEAM = KL2JALR869;
+				DEVELOPMENT_TEAM = 73G2KN78GM;
 				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
 				INFOPLIST_FILE = Camera/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Bundles";
@@ -1434,7 +1438,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KL2JALR869;
+				DEVELOPMENT_TEAM = 73G2KN78GM;
 				ENABLE_HARDENED_RUNTIME = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/glfw/3.3.2/include,
@@ -1442,6 +1446,7 @@
 					"$(SRCROOT)/Ext/imgui",
 					"$(SRCROOT)/Ext/imgui/examples",
 					/usr/local/include,
+					"$(SRCROOT)/Ext",
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/glfw/3.3.2/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.highwaycam;
@@ -1454,7 +1459,7 @@
 			buildSettings = {
 				CODE_SIGN_ENTITLEMENTS = "";
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KL2JALR869;
+				DEVELOPMENT_TEAM = 73G2KN78GM;
 				ENABLE_HARDENED_RUNTIME = NO;
 				HEADER_SEARCH_PATHS = (
 					/usr/local/Cellar/glfw/3.3.2/include,
@@ -1462,6 +1467,7 @@
 					"$(SRCROOT)/Ext/imgui",
 					"$(SRCROOT)/Ext/imgui/examples",
 					/usr/local/include,
+					"$(SRCROOT)/Ext",
 				);
 				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/glfw/3.3.2/lib;
 				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.highwaycam;
