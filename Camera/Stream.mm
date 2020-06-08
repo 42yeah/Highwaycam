@@ -38,6 +38,7 @@
     NSImage *_testImage;
     dispatch_source_t _frameDispatchSource;
     int _sock;
+    bool _established;
 }
 
 @property CMIODeviceStreamQueueAlteredProc alteredProc;
@@ -53,16 +54,46 @@
 
 #define FPS 30.0
 
-- (bool) testUDPMessage {
-    _sock = socket(AF_INET, SOCK_DGRAM, 0);
-    struct sockaddr_in sin;
-    sin.sin_addr.s_addr = 16777343;
-    sin.sin_port = htons(PORT);
-    sin.sin_family = AF_INET;
-    char hello[512] = "Hello world from fake camera!";
+- (bool) connect {
+    _sock = socket(AF_INET, SOCK_STREAM, 0);
 
-    sendto(_sock, hello, strlen(hello), 0, (struct sockaddr *) &sin, sizeof(sin));
-    return true;
+    sockaddr_in sin;
+    sin.sin_family = AF_INET;
+    sin.sin_port = htons(PORT);
+    sin.sin_addr.s_addr = 16777343; // 127.0.0.1
+    int rc = ::connect(_sock, (sockaddr *) &sin, sizeof(sin));
+    DLog(@"Attempting to establish connection... %d", rc);
+    if (rc >= 0) { DLog(@"Connection established!"); }
+    return rc >= 0;
+}
+
+- (void) fetchFrame {
+    char msg[] = "fetch";
+    if (!_established) {
+        _established = [self connect];
+        if (!_established) { return; }
+        return;
+    }
+    send(_sock, msg, sizeof(msg), 0);
+    
+    DLog("@Attempting to fetch frame...");
+    int imgSize = 0;
+    ssize_t len = recv(_sock, &imgSize, sizeof(imgSize), 0);
+    if (len < 0) {
+        _established = false;
+        DLog(@"%d: Receive failed: %ld", __LINE__, len);
+        return;
+    }
+    char *buf = new char[imgSize];
+    len = recv(_sock, buf, imgSize, 0);
+    if (len < 0) {
+        _established = false;
+        DLog(@"%d: Receive failed: %ld", __LINE__, len);
+        return;
+    }
+    DLog(@"Message received. Size: %ld", len);
+    
+    delete[] buf;
 }
 
 - (instancetype _Nonnull)init {
@@ -81,12 +112,8 @@
         });
     }
     
-    char name[] = "me.42yeah/shared";
-    ipc_sharedmemory memory;
-    ipc_mem_init(&memory, name, 1024);
-    ipc_mem_create(&memory);
-    DLog(@"Creation success? %d, %s, %d", errno, memory.name, memory.data == NULL);
-    ipc_mem_close(&memory);
+    _sock = -1;
+    _established = [self connect];
     return self;
 }
 
@@ -195,7 +222,8 @@
         DLog(@"Queue is full, bailing out");
         return;
     }
-    [self testUDPMessage];
+    
+    [self fetchFrame];
 
     CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
 

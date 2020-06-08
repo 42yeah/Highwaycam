@@ -15,7 +15,12 @@ Frame::Frame(App *app, std::string name, std::string fpath) {
     init(app, name, fpath);
 }
 
-void Frame::renderToScreen() {
+void Frame::renderToScreen(bool retina) {
+    if (!retina) {
+        glViewport(0, 0, size.x, size.y);
+    } else {
+        glViewport(0, 0, size.x * RETINA_MODIFIER, size.y * RETINA_MODIFIER);
+    }
     float aspect = app->winSize.x / app->winSize.y;
 
     glUseProgram(program);
@@ -34,8 +39,8 @@ void Frame::renderToScreen() {
 void Frame::render() {
     glBindFramebuffer(GL_FRAMEBUFFER, FBO);
     glClear(GL_COLOR_BUFFER_BIT);
-    glViewport(0, 0, size.x * RETINA_MODIFIER, size.y * RETINA_MODIFIER);
-    renderToScreen();
+
+    renderToScreen(false);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 

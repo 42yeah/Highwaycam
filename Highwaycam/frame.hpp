@@ -24,7 +24,7 @@ public:
     
     void init(App *app, std::string name, std::string fpath);
     
-    void renderToScreen();
+    void renderToScreen(bool retina = true);
     void render();
     
     Frame &chain(Frame &frame);

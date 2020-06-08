@@ -15,6 +15,7 @@
 App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50) {
     update();
     frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
+    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
     frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
     lastInstant = glfwGetTime();
     server.start();

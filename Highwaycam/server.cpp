@@ -23,7 +23,7 @@ void Server::start() {
     int rc = bind(sock, (sockaddr *) &sin, sizeof(sin));
     listen(sock, 5);
     if (rc < 0) {
-        app->warnings.push_back("Failed to bind server at port " + std::to_string(PORT) + ". Port taken or insufficient memory?");
+        app->warnings.push_back("Failed to bind server at port " + std::to_string(PORT) + ". Port taken or insufficient permission?");
         return;
     }
     time.tv_sec = 0;
@@ -46,22 +46,26 @@ void Server::respond() {
             sockaddr_in sin;
             socklen_t slen = sizeof(sin);
             int s = accept(sock, (sockaddr *) &sin, &slen);
+            send(s, "syn", 3, 0);
             connections.push_back(s);
-            app->warnings.push_back("Connection established.");
+            app->warnings.push_back("Connection established");
         }
         for (int i = 0; i < connections.size(); i++) {
             if (FD_ISSET(connections[i], &set)) {
                 char data[512] = { 0 };
                 ssize_t len = recv(connections[i], data, sizeof(data), 0);
-                if (len <= 0) {
+                if (len < 0) {
                     connections.erase(connections.begin() + i, connections.begin() + i + 1);
                     i--;
                     continue;
                 }
-                if (memcmp(data, "frame", 5) == 0) {
+                if (memcmp(data, "fetch", 5) == 0) {
                     app->updateCompressionStream();
                     std::string memory = app->compressionStream.str();
-                    send(connections[i], memory.c_str(), memory.size(), 0);
+                    ssize_t size = memory.size();
+                    app->warnings.push_back("Serving frame length: " + std::to_string(size));
+                    send(connections[i], &size, sizeof(int), 0);
+                    send(connections[i], memory.c_str(), size, 0);
                 }
             }
         }
