@@ -39,6 +39,9 @@
     dispatch_source_t _frameDispatchSource;
     int _sock;
     bool _established;
+    int _bufSize;
+    int _imgSize;
+    char *_buffer;
 }
 
 @property CMIODeviceStreamQueueAlteredProc alteredProc;
@@ -55,7 +58,9 @@
 #define FPS 30.0
 
 - (bool) connect {
-    _sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (_sock < 0) {
+        _sock = socket(AF_INET, SOCK_STREAM, 0);
+    }
 
     sockaddr_in sin;
     sin.sin_family = AF_INET;
@@ -75,25 +80,36 @@
         return;
     }
     send(_sock, msg, sizeof(msg), 0);
-    
-    DLog("@Attempting to fetch frame...");
-    int imgSize = 0;
-    ssize_t len = recv(_sock, &imgSize, sizeof(imgSize), 0);
+
+    _imgSize = 0;
+    ssize_t len = recv(_sock, &_imgSize, sizeof(_imgSize), 0);
     if (len < 0) {
         _established = false;
         DLog(@"%d: Receive failed: %ld", __LINE__, len);
         return;
     }
-    char *buf = new char[imgSize];
-    len = recv(_sock, buf, imgSize, 0);
-    if (len < 0) {
-        _established = false;
-        DLog(@"%d: Receive failed: %ld", __LINE__, len);
-        return;
+    DLog(@"Incoming frame size: %d", _imgSize);
+    int received = 0;
+    if (_buffer && _imgSize > _bufSize) {
+        delete[] _buffer;
+        _buffer = nullptr;
+    }
+    if (_buffer == nullptr) {
+        DLog(@"Reallocating buffer: %d", _imgSize);
+        _buffer = new char[_imgSize];
+        _bufSize = _imgSize;
+    }
+    while (received < _imgSize) {
+        len = recv(_sock, _buffer, _imgSize - received, 0);
+        received += len;
+        if (len < 0) {
+            _established = false;
+            DLog(@"%d: Receive failed: %ld", __LINE__, len);
+            return;
+        }
+        DLog(@"Partially received: %ld, tally %d, total %d", len, received, _imgSize);
     }
     DLog(@"Message received. Size: %ld", len);
-    
-    delete[] buf;
 }
 
 - (instancetype _Nonnull)init {
@@ -112,7 +128,9 @@
         });
     }
     
+    _buffer = nullptr;
     _sock = -1;
+    _imgSize = _bufSize = 0;
     _established = [self connect];
     return self;
 }

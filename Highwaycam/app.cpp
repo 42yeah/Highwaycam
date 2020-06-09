@@ -43,7 +43,7 @@ void App::renderGUI() {
     ImGui::NewFrame();
 
     if (warnings.size() > 0) {
-        configWindow({ 300.0f, 500.0f }, { 10.0f, 10.0f }, true);
+        configWindow({ 300.0f, 400.0f }, { 10.0f, 10.0f }, true);
         ImGui::Begin("Warnings");
         ImGui::TextWrapped("Uh oh, looks like there are warnings. The application might or might not run normally.");
         ImGui::Separator();
@@ -62,7 +62,7 @@ void App::renderGUI() {
     }
     ImGui::End();
     
-    configWindow({ 150.0f, 70.0f }, { 10.0f, 220.0f }, false, true);
+    configWindow({ 150.0f, 80.0f }, { 10.0f, 220.0f }, false, true);
     ImGui::Begin("Export");
     if (ImGui::Button("Export to PPM")) {
         std::ofstream result("result.ppm");
@@ -78,7 +78,7 @@ void App::renderGUI() {
     }
     ImGui::End();
     
-    configWindow({ 400.0f, 300.0f }, { 10.0f, 240.0f }, false, true);
+    configWindow({ 400.0f, 250.0f }, { 10.0f, 240.0f }, false, true);
     ImGui::Begin("Stream settings");
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::End();

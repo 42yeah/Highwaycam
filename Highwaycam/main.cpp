@@ -15,7 +15,7 @@ int main(int argc, const char * argv[]) {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    GLFWwindow *window = glfwCreateWindow(800, 600, "Highwaycam", nullptr, nullptr);
+    GLFWwindow *window = glfwCreateWindow(888, 500, "Highwaycam", nullptr, nullptr);
     glfwMakeContextCurrent(window);
     gladLoadGL();
     

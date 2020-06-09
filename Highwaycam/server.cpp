@@ -46,9 +46,7 @@ void Server::respond() {
             sockaddr_in sin;
             socklen_t slen = sizeof(sin);
             int s = accept(sock, (sockaddr *) &sin, &slen);
-            send(s, "syn", 3, 0);
             connections.push_back(s);
-            app->warnings.push_back("Connection established");
         }
         for (int i = 0; i < connections.size(); i++) {
             if (FD_ISSET(connections[i], &set)) {
@@ -63,7 +61,6 @@ void Server::respond() {
                     app->updateCompressionStream();
                     std::string memory = app->compressionStream.str();
                     ssize_t size = memory.size();
-                    app->warnings.push_back("Serving frame length: " + std::to_string(size));
                     send(connections[i], &size, sizeof(int), 0);
                     send(connections[i], memory.c_str(), size, 0);
                 }
