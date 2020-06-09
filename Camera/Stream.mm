@@ -42,6 +42,7 @@
     int _bufSize;
     int _imgSize;
     char *_buffer;
+    NSImage *_image;
 }
 
 @property CMIODeviceStreamQueueAlteredProc alteredProc;
@@ -132,6 +133,7 @@
     _sock = -1;
     _imgSize = _bufSize = 0;
     _established = [self connect];
+    _image = [NSImage alloc];
     return self;
 }
 
@@ -235,6 +237,28 @@
     return pxbuffer;
 }
 
+// Thanks @Thomas Zoechling! https://stackoverflow.com/questions/17481254/how-to-convert-nsdata-object-with-jpeg-data-into-cvpixelbufferref-in-os-x
+- (CVPixelBufferRef)newPixelBufferFromNSImage:(NSImage*)image
+{
+    CGColorSpaceRef colorSpace = CGColorSpaceCreateWithName(kCGColorSpaceGenericRGB);
+    NSDictionary* pixelBufferProperties = @{(id)kCVPixelBufferCGImageCompatibilityKey:@YES, (id)kCVPixelBufferCGBitmapContextCompatibilityKey:@YES};
+    CVPixelBufferRef pixelBuffer = NULL;
+    CVPixelBufferCreate(kCFAllocatorDefault, [image size].width, [image size].height, k32ARGBPixelFormat, (__bridge CFDictionaryRef)pixelBufferProperties, &pixelBuffer);
+    CVPixelBufferLockBaseAddress(pixelBuffer, 0);
+    void* baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);
+    size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
+    CGContextRef context = CGBitmapContextCreate(baseAddress, [image size].width, [image size].height, 8, bytesPerRow, colorSpace, kCGImageAlphaNoneSkipFirst);
+    NSGraphicsContext* imageContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+    [NSGraphicsContext saveGraphicsState];
+    [NSGraphicsContext setCurrentContext:imageContext];
+    [image compositeToPoint:NSMakePoint(0.0, 0.0) operation:NSCompositeCopy];
+    [NSGraphicsContext restoreGraphicsState];
+    CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+    CFRelease(context);
+    CGColorSpaceRelease(colorSpace);
+    return pixelBuffer;
+}
+
 - (void)fillFrame {
     if (CMSimpleQueueGetFullness(self.queue) >= 1.0) {
         DLog(@"Queue is full, bailing out");
@@ -243,8 +267,11 @@
     
     [self fetchFrame];
 
-    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
-
+//    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
+//    + (nullable UIImage *)imageWithData:(NSData *)data;
+    NSData *data = [NSData dataWithBytes:_buffer length:_imgSize];
+    _image = [_image initWithData:data];
+    CVPixelBufferRef pixelBuffer = [self newPixelBufferFromNSImage:_image];
     // The timing here is quite important. For frames to be delivered correctly and successfully be recorded by apps
     // like QuickTime Player, we need to be accurate in both our timestamps _and_ have a sensible scale. Using large
     // timestamps and scales like mach_absolute_time() and NSEC_PER_SEC will work for display, but will error out
