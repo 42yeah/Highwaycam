@@ -42,7 +42,6 @@
     int _bufSize;
     int _imgSize;
     char *_buffer;
-    NSImage *_image;
 }
 
 @property CMIODeviceStreamQueueAlteredProc alteredProc;
@@ -89,7 +88,6 @@
         DLog(@"%d: Receive failed: %ld", __LINE__, len);
         return;
     }
-    DLog(@"Incoming frame size: %d", _imgSize);
     int received = 0;
     if (_buffer && _imgSize > _bufSize) {
         delete[] _buffer;
@@ -108,9 +106,7 @@
             DLog(@"%d: Receive failed: %ld", __LINE__, len);
             return;
         }
-        DLog(@"Partially received: %ld, tally %d, total %d", len, received, _imgSize);
     }
-    DLog(@"Message received. Size: %ld", len);
 }
 
 - (instancetype _Nonnull)init {
@@ -133,7 +129,6 @@
     _sock = -1;
     _imgSize = _bufSize = 0;
     _established = [self connect];
-    _image = [NSImage alloc];
     return self;
 }
 
@@ -248,10 +243,10 @@
     void* baseAddress = CVPixelBufferGetBaseAddress(pixelBuffer);
     size_t bytesPerRow = CVPixelBufferGetBytesPerRow(pixelBuffer);
     CGContextRef context = CGBitmapContextCreate(baseAddress, [image size].width, [image size].height, 8, bytesPerRow, colorSpace, kCGImageAlphaNoneSkipFirst);
-    NSGraphicsContext* imageContext = [NSGraphicsContext graphicsContextWithGraphicsPort:context flipped:NO];
+    NSGraphicsContext* imageContext = [NSGraphicsContext graphicsContextWithCGContext:context flipped:NO];
     [NSGraphicsContext saveGraphicsState];
     [NSGraphicsContext setCurrentContext:imageContext];
-    [image compositeToPoint:NSMakePoint(0.0, 0.0) operation:NSCompositeCopy];
+    [image compositeToPoint:NSMakePoint(0.0, 0.0) operation:NSCompositingOperationCopy];
     [NSGraphicsContext restoreGraphicsState];
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     CFRelease(context);
@@ -268,10 +263,9 @@
     [self fetchFrame];
 
 //    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
-//    + (nullable UIImage *)imageWithData:(NSData *)data;
     NSData *data = [NSData dataWithBytes:_buffer length:_imgSize];
-    _image = [_image initWithData:data];
-    CVPixelBufferRef pixelBuffer = [self newPixelBufferFromNSImage:_image];
+    NSImage *image = [[NSImage alloc] initWithData:data];
+    CVPixelBufferRef pixelBuffer = [self newPixelBufferFromNSImage:image];
     // The timing here is quite important. For frames to be delivered correctly and successfully be recorded by apps
     // like QuickTime Player, we need to be accurate in both our timestamps _and_ have a sensible scale. Using large
     // timestamps and scales like mach_absolute_time() and NSEC_PER_SEC will work for display, but will error out
