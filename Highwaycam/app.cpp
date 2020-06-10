@@ -57,23 +57,6 @@ void App::renderGUI() {
         ImGui::End();
     }
     
-//    for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
-//    {
-//        const char* item = item_names[n];
-//        ImGui::Selectable(item);
-//
-//        if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
-//        {
-//            int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
-//            if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
-//            {
-//                item_names[n] = item_names[n_next];
-//                item_names[n_next] = item;
-//                ImGui::ResetMouseDragDelta();
-//            }
-//        }
-//    }
-    
     configWindow({ 400.0f, 200.0f }, { 10.0f, 10.0f });
     ImGui::Begin("Passes");
     helpMarker("You can drag checkboxes around to reorder passes.");
@@ -81,10 +64,12 @@ void App::renderGUI() {
         ImGui::PushID(i);
         if (ImGui::Button("Duplicate")) {
             std::pair<bool, Frame> frame = frames[i];
+            frame.second.initTexture();
             frames.insert(frames.begin() + i, frame);
         }
         ImGui::SameLine();
         if (ImGui::Button("Delete")) {
+            frames[i].second.destroyTexture();
             frames.erase(frames.begin() + i, frames.begin() + i + 1);
             ImGui::PopID();
             continue;
@@ -131,7 +116,7 @@ void App::renderGUI() {
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::End();
 
-    ImGui::ShowDemoWindow();
+//    ImGui::ShowDemoWindow();
     
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

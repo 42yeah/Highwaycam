@@ -27,6 +27,9 @@ public:
     void renderToScreen(bool retina = true);
     void render();
     
+    void initTexture();
+    void destroyTexture();
+    
     Frame &chain(Frame &frame);
     
     GLuint uniform(std::string name);

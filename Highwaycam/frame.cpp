@@ -75,6 +75,17 @@ void Frame::init(App *app, std::string name, std::string fpath) {
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, sizeof(float) * 2.0f, nullptr);
     
+    initTexture();
+    size = app->winSize;
+}
+
+Frame &Frame::chain(Frame &frame) { 
+    render();
+    frame.prevPass = texture;
+    return frame;
+}
+
+void Frame::initTexture() { 
     glGenTextures(1, &texture);
     glBindTexture(GL_TEXTURE_2D, texture);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -90,11 +101,10 @@ void Frame::init(App *app, std::string name, std::string fpath) {
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
-    size = app->winSize;
 }
 
-Frame &Frame::chain(Frame &frame) { 
-    render();
-    frame.prevPass = texture;
-    return frame;
+void Frame::destroyTexture() {
+    glDeleteTextures(1, &texture);
+    glDeleteFramebuffers(1, &FBO);
 }
+
