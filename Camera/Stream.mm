@@ -288,6 +288,10 @@
 
     CMFormatDescriptionRef format;
     CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &format);
+//    NSDictionary *dict = (__bridge NSDictionary*) format;
+//    for (NSString *key in [dict allKeys]) {
+//        NSLog(@"Dict: %@", [dict objectForKey:key]);
+//    }
 
     self.sequenceNumber = CMIOGetNextSequenceNumber(self.sequenceNumber);
 
