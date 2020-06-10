@@ -1,5 +1,9 @@
 #version 330 core
 
+// name: Default camera
+// enabled: true
+// weight: 5
+
 in vec2 uv;
 
 uniform float time;

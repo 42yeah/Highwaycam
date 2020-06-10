@@ -45,6 +45,10 @@ public:
     
     void updateCompressionStream();
     
+    void updateFrames();
+    
+    std::pair<bool, Frame> readFrame(std::string path);
+    
     // Borrowed from ImGui_Demo
     void helpMarker(std::string desc);
     

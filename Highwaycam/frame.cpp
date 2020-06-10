@@ -11,8 +11,8 @@
 #include "program.hpp"
 
 
-Frame::Frame(App *app, std::string name, std::string fpath) {
-    init(app, name, fpath);
+Frame::Frame(App *app, std::string name, std::string fpath, int weight) {
+    init(app, name, fpath, weight);
 }
 
 void Frame::renderToScreen(bool retina) {
@@ -52,10 +52,11 @@ GLuint Frame::uniform(std::string name) {
     return uniforms[name];
 }
 
-void Frame::init(App *app, std::string name, std::string fpath) {
+void Frame::init(App *app, std::string name, std::string fpath, int weight) {
     this->app = app;
     this->prevPass = 0;
     this->name = name;
+    this->weight = weight;
     program = link(app, "Shaders/vertex.glsl", fpath);
     
     float buf[] = {

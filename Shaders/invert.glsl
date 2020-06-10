@@ -1,5 +1,8 @@
 #version 330 core
 
+// name: Invert pass
+// weight: 3
+
 in vec2 uv;
 
 uniform float time;

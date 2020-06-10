@@ -1,5 +1,9 @@
 #version 330 core
 
+// name: Test Raymarching scene
+// weight: 4
+// enabled: true
+
 in vec2 uv;
 
 uniform float time;

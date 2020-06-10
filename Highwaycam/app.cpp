@@ -10,14 +10,16 @@
 #include "program.hpp"
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
+#include <filesystem>
 
 
 App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50) {
     update();
-    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
-    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
-    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
-    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Noise pass", "Shaders/noisify.glsl")));
+//    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
+//    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
+//    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
+//    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Noise pass", "Shaders/noisify.glsl")));
+    updateFrames();
     lastInstant = glfwGetTime();
     server.start();
     finalImageBuffer.first = (int) winSize.x * (int) winSize.y * 24;
@@ -147,7 +149,6 @@ void App::mainLoop() {
         if (currentFrame) {
             currentFrame->renderToScreen();
         }
-        std::cout << glGetError() << "---" << std::endl;
         renderGUI();
         updateFinalImageBuffer();
         glfwSwapBuffers(window);
@@ -209,4 +210,68 @@ void App::helpMarker(std::string desc) {
         ImGui::PopTextWrapPos();
         ImGui::EndTooltip();
     }
+}
+
+void App::updateFrames() { 
+    namespace fs = std::__fs::filesystem;
+    std::string blacklist = { "vertex.glsl" };
+    for (const auto &entry : fs::directory_iterator("Shaders")) {
+        std::string name = entry.path().filename().string();
+        if (name == blacklist) {
+            continue;
+        } else {
+            frames.push_back(readFrame(entry.path().string()));
+        }
+    }
+    
+    struct {
+        bool operator()(std::pair<bool, Frame> a, std::pair<bool, Frame> b) {
+            return a.second.weight > b.second.weight;
+        }
+    } cmp;
+    std::sort(frames.begin(), frames.end(), cmp);
+}
+
+std::pair<bool, Frame> App::readFrame(std::string path) {
+    std::ifstream reader(path);
+    std::string line;
+    std::getline(reader, line, '\n');
+    std::getline(reader, line, '\n');
+    
+    bool activated = false;
+    std::string name = path;
+    int weight = 0;
+    
+    std::cout << line << std::endl;
+    while (line.rfind("// ", 0) == 0 || line == "") {
+        if (line == "" || line.length() <= 3) {
+            std::getline(reader, line, '\n');
+            continue;
+        }
+        std::string data = line.substr(3);
+        
+        auto pos = data.find(": ");
+        if (pos == std::string::npos) {
+            std::getline(reader, line, '\n');
+            continue;
+        }
+
+        std::string key = data.substr(0, pos);
+        std::string value = data.substr(pos + 2);
+        if (key == "name") {
+            name = value;
+        } else if (key == "enabled") {
+            activated = value == "true";
+        } else if (key == "weight") {
+            try {
+                weight = std::stoi(value);
+            } catch (std::exception e) {
+                warnings.push_back(name + " has invalid weight defined: " + value);
+            }
+        }
+        
+        std::getline(reader, line, '\n');
+    }
+    
+    return std::pair<bool, Frame>(activated, Frame(this, name, path, weight));
 }

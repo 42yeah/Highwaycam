@@ -1,5 +1,7 @@
 #version 330 core
 
+// name: Noise pass
+// weight: 2
 
 in vec2 uv;
 

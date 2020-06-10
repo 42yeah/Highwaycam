@@ -20,9 +20,9 @@ class App;
 class Frame {
 public:
     Frame() {}
-    Frame(App *app, std::string name, std::string fpath);
+    Frame(App *app, std::string name, std::string fpath, int weight);
     
-    void init(App *app, std::string name, std::string fpath);
+    void init(App *app, std::string name, std::string fpath, int weight);
     
     void renderToScreen(bool retina = true);
     void render();
@@ -40,6 +40,7 @@ public:
     GLuint prevPass;
     App *app;
     std::string name;
+    int weight;
 };
 
 #endif /* frame_hpp */
