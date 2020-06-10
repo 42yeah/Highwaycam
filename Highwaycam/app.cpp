@@ -13,7 +13,7 @@
 #include <filesystem>
 
 
-App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50) {
+App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50), renderSendRatio(1) {
     update();
 //    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
 //    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
@@ -24,6 +24,7 @@ App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compres
     server.start();
     finalImageBuffer.first = (int) winSize.x * (int) winSize.y * 24;
     finalImageBuffer.second = new unsigned char[finalImageBuffer.first]; // RGB * W * H
+    numFramesRendered = 0;
 }
 
 void App::update() {
@@ -36,7 +37,10 @@ void App::update() {
     glfwGetFramebufferSize(window, &w, &h);
     winSize = { (float) w / RETINA_MODIFIER, (float) h / RETINA_MODIFIER };
     
-    server.respond();
+    if (numFramesRendered >= renderSendRatio) {
+        numFramesRendered = 0;
+        server.respond();
+    }
 }
 
 void App::renderGUI() {
@@ -116,6 +120,7 @@ void App::renderGUI() {
     configWindow({ 400.0f, 250.0f }, { 10.0f, 240.0f }, false, true);
     ImGui::Begin("Stream settings");
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
+    ImGui::SliderInt("Render-Send ratio", &renderSendRatio, 1, 100);
     ImGui::End();
 
 //    ImGui::ShowDemoWindow();
@@ -152,6 +157,7 @@ void App::mainLoop() {
         renderGUI();
         updateFinalImageBuffer();
         glfwSwapBuffers(window);
+        numFramesRendered++;
     }
 }
 
@@ -268,6 +274,8 @@ std::pair<bool, Frame> App::readFrame(std::string path) {
             } catch (std::exception e) {
                 warnings.push_back(name + " has invalid weight defined: " + value);
             }
+        } else if (key == "warning") {
+            warnings.push_back(value);
         }
         
         std::getline(reader, line, '\n');

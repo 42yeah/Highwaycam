@@ -63,6 +63,8 @@ public:
 
     std::stringstream compressionStream;
     int compressQuality;
+    int renderSendRatio;
+    int numFramesRendered;
 
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false, bool collapsed = false);
