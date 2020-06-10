@@ -162,6 +162,7 @@ void App::mainLoop() {
         if (currentFrame) {
             currentFrame->renderToScreen();
         }
+        std::cout << glGetError() << "---" << std::endl;
         renderGUI();
         updateFinalImageBuffer();
         glfwSwapBuffers(window);

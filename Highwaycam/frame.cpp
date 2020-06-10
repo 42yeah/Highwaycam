@@ -25,7 +25,7 @@ void Frame::renderToScreen(bool retina) {
 
     glUseProgram(program);
     if (prevPass != 0) {
-        glActiveTexture(0);
+        glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, prevPass);
         glUniform1i(uniform("prevPass"), 0);
         prevPass = 0;
