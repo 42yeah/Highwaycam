@@ -316,6 +316,39 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
     return noErr;
 }
 
+- (CVPixelBufferRef)createPixelBufferWithCGImage:(CGImage *)image size:(CGSize)size {
+    int width = 1280;
+    int height = 720;
+
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, nil];
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options, &pxbuffer);
+
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, width, height, 8, CVPixelBufferGetBytesPerRow(pxbuffer), rgbColorSpace, kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Big);
+    NSParameterAssert(context);
+
+    double time = double(mach_absolute_time()) / NSEC_PER_SEC;
+    CGFloat pos = CGFloat(time - floor(time));
+
+    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
+
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+
+    return pxbuffer;
+}
+
 - (void)fillFrame {
     if (CMSimpleQueueGetFullness(self.queue) >= 1.0) {
         DLog(@"Queue is full, bailing out");
@@ -326,7 +359,12 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
 
 //    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
     NSData *data = [NSData dataWithBytes:_buffer length:_imgSize];
-    NSImage *image = [[NSImage alloc] initWithData:data];
+    CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData((__bridge CFDataRef) data);
+    CGImageRef image = CGImageCreateWithJPEGDataProvider(imgDataProvider, nullptr, true, kCGRenderingIntentDefault);
+    CGSize size = [[[NSImage alloc] initWithData:data] size];
+
+    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithCGImage:image size:size];
+    
     // The timing here is quite important. For frames to be delivered correctly and successfully be recorded by apps
     // like QuickTime Player, we need to be accurate in both our timestamps _and_ have a sensible scale. Using large
     // timestamps and scales like mach_absolute_time() and NSEC_PER_SEC will work for display, but will error out
@@ -346,9 +384,24 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
     if (err != noErr) {
         DLog(@"CMIOStreamClockPostTimingEvent err %d", err);
     }
+    
+    CMFormatDescriptionRef format;
+    CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &format);
+
+    self.sequenceNumber = CMIOGetNextSequenceNumber(self.sequenceNumber);
 
     CMSampleBufferRef buffer;
-    err = CMSampleBufferCreateFromDataNoCopy(image.size, timing, _sequenceNumber, data, &buffer);
+    err = CMIOSampleBufferCreateForImageBuffer(
+        kCFAllocatorDefault,
+        pixelBuffer,
+        format,
+        &timing,
+        self.sequenceNumber,
+        kCMIOSampleBufferNoDiscontinuities,
+        &buffer
+    );
+    CFRelease(pixelBuffer);
+    CFRelease(format);
     if (err != noErr) {
         DLog(@"CMIOSampleBufferCreateForImageBuffer err %d", err);
     }
