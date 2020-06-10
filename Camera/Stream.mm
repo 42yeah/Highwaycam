@@ -339,7 +339,9 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
     double time = double(mach_absolute_time()) / NSEC_PER_SEC;
     CGFloat pos = CGFloat(time - floor(time));
 
-    CGContextDrawImage(context, CGRectMake(0, 0, CGImageGetWidth(image), CGImageGetHeight(image)), image);
+    CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, height);
+    CGContextConcatCTM(context, flip);
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), image);
 
     CGColorSpaceRelease(rgbColorSpace);
     CGContextRelease(context);
@@ -361,7 +363,7 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
     NSData *data = [NSData dataWithBytes:_buffer length:_imgSize];
     CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData((__bridge CFDataRef) data);
     CGImageRef image = CGImageCreateWithJPEGDataProvider(imgDataProvider, nullptr, true, kCGRenderingIntentDefault);
-    CGSize size = [[[NSImage alloc] initWithData:data] size];
+    CGSize size = CGSizeMake(CGImageGetWidth(image), CGImageGetHeight(image));
 
     CVPixelBufferRef pixelBuffer = [self createPixelBufferWithCGImage:image size:size];
     
@@ -402,6 +404,8 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
     );
     CFRelease(pixelBuffer);
     CFRelease(format);
+    CGImageRelease(image);
+    CFRelease(imgDataProvider);
     if (err != noErr) {
         DLog(@"CMIOSampleBufferCreateForImageBuffer err %d", err);
     }
