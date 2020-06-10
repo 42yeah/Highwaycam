@@ -254,6 +254,103 @@
     return pixelBuffer;
 }
 
+// Thanks @findall! https://stackoverflow.com/questions/26158253/how-to-create-a-cmblockbufferref-from-nsdata
+static void releaseNSData(void *o, void *block, size_t size)
+{
+    NSData *data = (__bridge_transfer NSData*) o;
+    data = nil; // Assuming ARC is enabled
+}
+
+OSStatus createReadonlyBlockBuffer(CMBlockBufferRef *result, NSData *data)
+{
+    CMBlockBufferCustomBlockSource blockSource =
+    {
+        .version       = kCMBlockBufferCustomBlockSourceVersion,
+        .AllocateBlock = NULL,
+        .FreeBlock     = &releaseNSData,
+        .refCon        = (__bridge_retained void*) data,
+    };
+    return CMBlockBufferCreateWithMemoryBlock(NULL, (uint8_t*) data.bytes, data.length, NULL, &blockSource, 0, data.length, 0, result);
+}
+
+/*!
+ CMSampleBufferCreateFromDataNoCopy
+ Creates a CMSampleBuffer by using the bytes directly from NSData (without copying them).
+ Seems to mostly work but does not work at full resolution in OBS for some reason (which prevents loopback testing).
+ */
+OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timingInfo, UInt64 sequenceNumber, NSData *data, CMSampleBufferRef *sampleBuffer) {
+    OSStatus err = noErr;
+
+    CMBlockBufferRef dataBuffer;
+    createReadonlyBlockBuffer(&dataBuffer, data);
+
+    // Magic format properties snagged from https://github.com/lvsti/CoreMediaIO-DAL-Example/blob/0392cbf27ed33425a1a5bd9f495b2ccec8f20501/Sources/Extras/CoreMediaIO/DeviceAbstractionLayer/Devices/Sample/PlugIn/CMIO_DP_Sample_Stream.cpp#L830
+    NSDictionary *extensions = @{
+        @"com.apple.cmio.format_extension.video.only_has_i_frames": @YES,
+        (__bridge NSString *)kCMFormatDescriptionExtension_FieldCount: @1,
+        (__bridge NSString *)kCMFormatDescriptionExtension_ColorPrimaries: (__bridge NSString *)kCMFormatDescriptionColorPrimaries_SMPTE_C,
+        (__bridge NSString *)kCMFormatDescriptionExtension_TransferFunction: (__bridge NSString *)kCMFormatDescriptionTransferFunction_ITU_R_709_2,
+        (__bridge NSString *)kCMFormatDescriptionExtension_YCbCrMatrix: (__bridge NSString *)kCMFormatDescriptionYCbCrMatrix_ITU_R_601_4,
+        (__bridge NSString *)kCMFormatDescriptionExtension_BytesPerRow: @(size.width * 2),
+        (__bridge NSString *)kCMFormatDescriptionExtension_FormatName: @"Component Video - CCIR-601 uyvy",
+        (__bridge NSString *)kCMFormatDescriptionExtension_Version: @2,
+    };
+
+    CMFormatDescriptionRef format;
+    err = CMVideoFormatDescriptionCreate(NULL, kCMVideoCodecType_JPEG, size.width, size.height, (__bridge CFDictionaryRef)extensions, &format);
+    if (err != noErr) {
+        DLog(@"CMVideoFormatDescriptionCreate err %d", err);
+        return err;
+    }
+
+    size_t dataSize = data.length;
+    err = CMIOSampleBufferCreate(kCFAllocatorDefault, dataBuffer, format, 1, 1, &timingInfo, 1, &dataSize, sequenceNumber, 0, sampleBuffer);
+    CFRelease(format);
+    CFRelease(dataBuffer);
+
+    if (err != noErr) {
+        DLog(@"CMIOSampleBufferCreate err %d", err);
+        return err;
+    }
+
+    return noErr;
+}
+
+- (CVPixelBufferRef)createPixelBufferWithCGImage:(CGImage *)image size:(CGSize)size {
+    int width = 1280;
+    int height = 720;
+
+    NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGImageCompatibilityKey,
+                             [NSNumber numberWithBool:YES], kCVPixelBufferCGBitmapContextCompatibilityKey, nil];
+    CVPixelBufferRef pxbuffer = NULL;
+    CVReturn status = CVPixelBufferCreate(kCFAllocatorDefault, width, height, kCVPixelFormatType_32ARGB, (__bridge CFDictionaryRef) options, &pxbuffer);
+
+    NSParameterAssert(status == kCVReturnSuccess && pxbuffer != NULL);
+
+    CVPixelBufferLockBaseAddress(pxbuffer, 0);
+    void *pxdata = CVPixelBufferGetBaseAddress(pxbuffer);
+    NSParameterAssert(pxdata != NULL);
+
+    CGColorSpaceRef rgbColorSpace = CGColorSpaceCreateDeviceRGB();
+    CGContextRef context = CGBitmapContextCreate(pxdata, width, height, 8, CVPixelBufferGetBytesPerRow(pxbuffer), rgbColorSpace, kCGImageAlphaPremultipliedFirst | kCGImageByteOrder32Big);
+    NSParameterAssert(context);
+
+    double time = double(mach_absolute_time()) / NSEC_PER_SEC;
+    CGFloat pos = CGFloat(time - floor(time));
+
+    CGAffineTransform flip = CGAffineTransformMake(1, 0, 0, -1, 0, height);
+    CGContextConcatCTM(context, flip);
+    CGContextDrawImage(context, CGRectMake(0, 0, width, height), image);
+
+    CGColorSpaceRelease(rgbColorSpace);
+    CGContextRelease(context);
+
+    CVPixelBufferUnlockBaseAddress(pxbuffer, 0);
+
+    return pxbuffer;
+}
+
 - (void)fillFrame {
     if (CMSimpleQueueGetFullness(self.queue) >= 1.0) {
         DLog(@"Queue is full, bailing out");
@@ -264,8 +361,12 @@
 
 //    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithTestAnimation];
     NSData *data = [NSData dataWithBytes:_buffer length:_imgSize];
-    NSImage *image = [[NSImage alloc] initWithData:data];
-    CVPixelBufferRef pixelBuffer = [self newPixelBufferFromNSImage:image];
+    CGDataProviderRef imgDataProvider = CGDataProviderCreateWithCFData((__bridge CFDataRef) data);
+    CGImageRef image = CGImageCreateWithJPEGDataProvider(imgDataProvider, nullptr, true, kCGRenderingIntentDefault);
+    CGSize size = CGSizeMake(CGImageGetWidth(image), CGImageGetHeight(image));
+
+    CVPixelBufferRef pixelBuffer = [self createPixelBufferWithCGImage:image size:size];
+    
     // The timing here is quite important. For frames to be delivered correctly and successfully be recorded by apps
     // like QuickTime Player, we need to be accurate in both our timestamps _and_ have a sensible scale. Using large
     // timestamps and scales like mach_absolute_time() and NSEC_PER_SEC will work for display, but will error out
@@ -285,7 +386,7 @@
     if (err != noErr) {
         DLog(@"CMIOStreamClockPostTimingEvent err %d", err);
     }
-
+    
     CMFormatDescriptionRef format;
     CMVideoFormatDescriptionCreateForImageBuffer(kCFAllocatorDefault, pixelBuffer, &format);
 //    NSDictionary *dict = (__bridge NSDictionary*) format;
@@ -307,6 +408,8 @@
     );
     CFRelease(pixelBuffer);
     CFRelease(format);
+    CGImageRelease(image);
+    CFRelease(imgDataProvider);
     if (err != noErr) {
         DLog(@"CMIOSampleBufferCreateForImageBuffer err %d", err);
     }
