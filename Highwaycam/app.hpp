@@ -45,6 +45,9 @@ public:
     
     void updateCompressionStream();
     
+    // Borrowed from ImGui_Demo
+    void helpMarker(std::string desc);
+    
     glm::vec2 winSize;
     GLFWwindow *window;
     std::vector<std::string> warnings;

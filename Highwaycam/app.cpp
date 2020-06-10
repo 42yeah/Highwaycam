@@ -17,6 +17,7 @@ App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compres
     frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
     frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
     frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
+    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Noise pass", "Shaders/noisify.glsl")));
     lastInstant = glfwGetTime();
     server.start();
     finalImageBuffer.first = (int) winSize.x * (int) winSize.y * 24;
@@ -55,10 +56,57 @@ void App::renderGUI() {
         }
         ImGui::End();
     }
+    
+//    for (int n = 0; n < IM_ARRAYSIZE(item_names); n++)
+//    {
+//        const char* item = item_names[n];
+//        ImGui::Selectable(item);
+//
+//        if (ImGui::IsItemActive() && !ImGui::IsItemHovered())
+//        {
+//            int n_next = n + (ImGui::GetMouseDragDelta(0).y < 0.f ? -1 : 1);
+//            if (n_next >= 0 && n_next < IM_ARRAYSIZE(item_names))
+//            {
+//                item_names[n] = item_names[n_next];
+//                item_names[n_next] = item;
+//                ImGui::ResetMouseDragDelta();
+//            }
+//        }
+//    }
+    
     configWindow({ 400.0f, 200.0f }, { 10.0f, 10.0f });
     ImGui::Begin("Passes");
+    helpMarker("You can drag checkboxes around to reorder passes.");
     for (int i = 0; i < frames.size(); i++) {
+        ImGui::PushID(i);
+        if (ImGui::Button("Duplicate")) {
+            std::pair<bool, Frame> frame = frames[i];
+            frames.insert(frames.begin() + i, frame);
+        }
+        ImGui::SameLine();
+        if (ImGui::Button("Delete")) {
+            frames.erase(frames.begin() + i, frames.begin() + i + 1);
+            ImGui::PopID();
+            continue;
+        }
+        ImGui::SameLine();
         ImGui::Checkbox(frames[i].second.name.c_str(), &frames[i].first);
+        
+        if (ImGui::BeginDragDropSource(ImGuiDragDropFlags_None)) {
+            ImGui::SetDragDropPayload("FRAME", &i, sizeof(int));
+            ImGui::Text("%s", frames[i].second.name.c_str());
+            ImGui::EndDragDropSource();
+        }
+        if (ImGui::BeginDragDropTarget()) {
+            if (const ImGuiPayload *payload = ImGui::AcceptDragDropPayload("FRAME")) {
+                int swap = *(int *) payload->Data;
+                std::pair<bool, Frame> tmp = frames[swap];
+                frames[swap] = frames[i];
+                frames[i] = tmp;
+            }
+            ImGui::EndDragDropTarget();
+        }
+        ImGui::PopID();
     }
     ImGui::End();
     
@@ -83,6 +131,8 @@ void App::renderGUI() {
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::End();
 
+    ImGui::ShowDemoWindow();
+    
     ImGui::Render();
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 }
@@ -162,4 +212,15 @@ void App::updateFinalImageBuffer() {
 void App::quit() {
     delete[] finalImageBuffer.second;
     server.stop();
+}
+
+void App::helpMarker(std::string desc) {
+    ImGui::TextDisabled("(?)");
+    if (ImGui::IsItemHovered()) {
+        ImGui::BeginTooltip();
+        ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
+        ImGui::TextUnformatted(desc.c_str());
+        ImGui::PopTextWrapPos();
+        ImGui::EndTooltip();
+    }
 }
