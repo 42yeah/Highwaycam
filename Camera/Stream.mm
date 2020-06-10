@@ -409,7 +409,6 @@ OSStatus CMSampleBufferCreateFromDataNoCopy(NSSize size, CMSampleTimingInfo timi
     CFRelease(pixelBuffer);
     CFRelease(format);
     CGImageRelease(image);
-    CFRelease(imgDataProvider);
     if (err != noErr) {
         DLog(@"CMIOSampleBufferCreateForImageBuffer err %d", err);
     }
