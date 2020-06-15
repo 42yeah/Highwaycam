@@ -18,7 +18,7 @@ vec2 rot2d(vec2 uv, float deg) {
 
 void main() {
     vec2 xy = uv * 2.0 - 1.0;
-    xy = rot2d(xy, time);
-    xy = rot2d(xy, time * length(xy));
+    xy = rot2d(xy, time * 0.01);
+    xy = rot2d(xy, time * length(xy) * 0.01);
     color = texture(prevPass, xy);
 }
