@@ -168,10 +168,8 @@ void App::mainLoop() {
             if (!frames[i].first) { continue; }
             if (!currentFrame) {
                 currentFrame = &frames[i].second;
+                currentFrame->prevPass = realCamera.frame.texture;
                 continue;
-            }
-            if (i == 0) {
-                currentFrame->prevPass = realCamera.cameraTexture;
             }
             currentFrame = &(currentFrame->chain(frames[i].second));
         }
@@ -219,7 +217,7 @@ void App::updateFinalImageBuffer() {
         }
     }
     if (!latest) {
-        return;
+        latest = &realCamera.frame;
     }
     latest->render();
 //    int size = (int) latest->size.x * (int) latest->size.y * 24 * 4;
