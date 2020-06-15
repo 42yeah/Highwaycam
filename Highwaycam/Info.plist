@@ -5,7 +5,7 @@
 	<key>CFBundleIdentifier</key>
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleExecutable</key>
-	<string>$(EXECUTABLE_NAME)</string>
+	<string>Highwaycam</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Highwaycam requires camera access to, you know, process it.</string>
 </dict>
