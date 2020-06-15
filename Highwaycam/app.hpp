@@ -25,6 +25,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include "frame.hpp"
 #include "server.hpp"
+#include "camfetch.hpp"
 
 
 class App {
@@ -65,6 +66,8 @@ public:
     int compressQuality;
     int renderSendRatio;
     int numFramesRendered;
+
+    Camera realCamera;
 
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false, bool collapsed = false);

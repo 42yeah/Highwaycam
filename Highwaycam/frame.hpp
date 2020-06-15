@@ -11,11 +11,16 @@
 
 #include <iostream>
 #include <map>
+#include <vector>
 #include <glad/glad.h>
 #include <glm/glm.hpp>
 
 class App;
 
+
+enum BindType {
+    BIND_TEXTURE, BIND_FLOAT
+};
 
 class Frame {
 public:
@@ -30,12 +35,18 @@ public:
     void initTexture();
     void destroyTexture();
     
+    void bind(std::string uniformName, float value);
+    void bind(std::string uniformName, GLuint value);
+    
     Frame &chain(Frame &frame);
     
     GLuint uniform(std::string name);
 
     GLuint VAO, program, FBO, texture;
     std::map<std::string, GLuint> uniforms;
+    
+    std::vector<std::pair<std::string, GLuint> > extraTextures;
+    
     glm::vec2 size;
     GLuint prevPass;
     App *app;

@@ -11,6 +11,7 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 #include <stb_image_write.h>
 #include <filesystem>
+#include <imgui_widgets.cpp>
 
 
 App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50), renderSendRatio(1) {
@@ -19,11 +20,12 @@ App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compres
 //    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
 //    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Invert pass", "Shaders/invert.glsl")));
 //    frames.push_back(std::pair<bool, Frame>(false, Frame(this, "Noise pass", "Shaders/noisify.glsl")));
-    updateFrames();
     lastInstant = glfwGetTime();
     server.start();
     finalImageBuffer.first = (int) winSize.x * (int) winSize.y * 24;
     finalImageBuffer.second = new unsigned char[finalImageBuffer.first]; // RGB * W * H
+    realCamera = Camera(this, 1);
+    updateFrames();
     numFramesRendered = 0;
 }
 
@@ -37,6 +39,9 @@ void App::update() {
     glfwGetFramebufferSize(window, &w, &h);
     winSize = { (float) w / RETINA_MODIFIER, (float) h / RETINA_MODIFIER };
     
+    // === STREAM CAMERA TEXTURE === //
+    realCamera.read();
+    
     if (numFramesRendered >= renderSendRatio) {
         numFramesRendered = 0;
         server.respond();
@@ -45,6 +50,7 @@ void App::update() {
 
 void App::renderGUI() {
     glViewport(0, 0, winSize.x, winSize.y);
+    
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -66,6 +72,16 @@ void App::renderGUI() {
     configWindow({ 400.0f, 200.0f }, { 10.0f, 10.0f });
     ImGui::Begin("Passes");
     helpMarker("You can drag checkboxes around to reorder passes.");
+    
+    ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
+    ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
+    ImGui::Button("Duplicate"); ImGui::SameLine(); // Just for the asthetics
+    ImGui::Button("Delete"); ImGui::SameLine();
+    bool trash = true;
+    ImGui::Checkbox(realCamera.frame.name.c_str(), &trash);
+    ImGui::PopItemFlag();
+    ImGui::PopStyleVar();
+    
     for (int i = 0; i < frames.size(); i++) {
         ImGui::PushID(i);
         if (ImGui::Button("Duplicate")) {
@@ -122,6 +138,10 @@ void App::renderGUI() {
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::SliderInt("Render-Send ratio", &renderSendRatio, 1, 100);
     ImGui::End();
+    
+    configWindow({ 500.0f, 250.0f }, { 10.0f, 260.0f }, false, true);
+    ImGui::Begin("Default camera");
+    ImGui::End();
 
 //    ImGui::ShowDemoWindow();
     
@@ -142,6 +162,7 @@ void App::mainLoop() {
         glfwPollEvents();
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         update();
+
         Frame *currentFrame = nullptr;
         for (int i = 0; i < frames.size(); i++) {
             if (!frames[i].first) { continue; }
@@ -149,10 +170,15 @@ void App::mainLoop() {
                 currentFrame = &frames[i].second;
                 continue;
             }
+            if (i == 0) {
+                currentFrame->prevPass = realCamera.cameraTexture;
+            }
             currentFrame = &(currentFrame->chain(frames[i].second));
         }
         if (currentFrame) {
             currentFrame->renderToScreen();
+        } else {
+            realCamera.frame.renderToScreen();
         }
         renderGUI();
         updateFinalImageBuffer();
@@ -218,14 +244,20 @@ void App::helpMarker(std::string desc) {
     }
 }
 
-void App::updateFrames() { 
+void App::updateFrames() {
     namespace fs = std::__fs::filesystem;
-    std::string blacklist = { "vertex.glsl" };
+    std::string blacklist[] = { "vertex.glsl", "camera.glsl" };
     for (const auto &entry : fs::directory_iterator("Shaders")) {
         std::string name = entry.path().filename().string();
-        if (name == blacklist) {
-            continue;
-        } else {
+        std::string suffix = ".glsl";
+        bool blacklisted = false;
+        for (std::string &banned : blacklist) {
+            if (name == banned || !std::equal(suffix.rbegin(), suffix.rend(), name.rbegin())) {
+                blacklisted = true;
+                break;
+            }
+        }
+        if (!blacklisted) {
             frames.push_back(readFrame(entry.path().string()));
         }
     }

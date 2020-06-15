@@ -32,6 +32,11 @@ void Frame::renderToScreen(bool retina) {
     }
     glUniform1f(uniform("aspect"), aspect);
     glUniform1f(uniform("time"), app->time);
+    for (int i = 0; i < extraTextures.size(); i++) {
+        glActiveTexture(GL_TEXTURE0 + (i + 1));
+        glBindTexture(GL_TEXTURE_2D, extraTextures[i].second);
+        glUniform1i(uniform(extraTextures[i].first), (i + 1));
+    }
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -80,7 +85,7 @@ void Frame::init(App *app, std::string name, std::string fpath, int weight) {
     size = app->winSize;
 }
 
-Frame &Frame::chain(Frame &frame) { 
+Frame &Frame::chain(Frame &frame) {
     render();
     frame.prevPass = texture;
     return frame;
@@ -98,7 +103,7 @@ void Frame::initTexture() {
     glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, texture, 0);
     
     if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE) {
-        app->warnings.push_back("Created framebuffer is incomlete complete.");
+        app->warnings.push_back("Created framebuffer is incomplete.");
     }
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glBindTexture(GL_TEXTURE_2D, 0);
@@ -109,3 +114,10 @@ void Frame::destroyTexture() {
     glDeleteFramebuffers(1, &FBO);
 }
 
+void Frame::bind(std::string uniformName, float value) { 
+    // TODO
+}
+
+void Frame::bind(std::string uniformName, GLuint value) { 
+    extraTextures.push_back({ uniformName, value });
+}
