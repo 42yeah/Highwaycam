@@ -14,7 +14,7 @@
 #include <imgui_widgets.cpp>
 
 
-App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50), renderSendRatio(1) {
+App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compressQuality(50), renderSendRatio(1), horizontalFlip(true) {
     update();
 //    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Default camera", "Shaders/fragment.glsl")));
 //    frames.push_back(std::pair<bool, Frame>(true, Frame(this, "Fake camera", "Shaders/test.glsl")));
@@ -137,6 +137,7 @@ void App::renderGUI() {
     ImGui::Begin("Stream settings");
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::SliderInt("Render-Send ratio", &renderSendRatio, 1, 100);
+    ImGui::Checkbox("Flip video horizontally", &horizontalFlip);
     ImGui::End();
     
     configWindow({ 500.0f, 250.0f }, { 10.0f, 260.0f }, false, true);

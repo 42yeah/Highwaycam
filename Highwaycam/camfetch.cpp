@@ -7,6 +7,7 @@
 //
 
 #include "camfetch.hpp"
+#include "app.hpp"
 #include <glad/glad.h>
 
 
@@ -34,6 +35,7 @@ cv::Mat &Camera::read() {
         glBindTexture(GL_TEXTURE_2D, cameraTexture);
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getBufferWidth(), getBufferHeight(), 0, GL_BGR, GL_UNSIGNED_BYTE, getRawMemory());
+    glUniform1i(frame.uniform("flip"), app->horizontalFlip);
     frame.render();
     glBindTexture(GL_TEXTURE_2D, 0);
     

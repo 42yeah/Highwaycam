@@ -66,6 +66,7 @@ public:
     int compressQuality;
     int renderSendRatio;
     int numFramesRendered;
+    bool horizontalFlip;
 
     Camera realCamera;
 
