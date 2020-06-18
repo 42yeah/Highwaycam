@@ -38,6 +38,7 @@ void Frame::renderToScreen(bool retina) {
         glUniform1i(uniform(extraTextures[i].first), (i + 1));
     }
     for (int i = 0; i < extraUniforms.size(); i++) {
+        std::cout << "Uniforming " << extraUniforms[i].first << " as " << (*extraUniforms[i].second) << std::endl;
         glUniform1f(uniform(extraUniforms[i].first), *extraUniforms[i].second);
     }
     glBindVertexArray(VAO);

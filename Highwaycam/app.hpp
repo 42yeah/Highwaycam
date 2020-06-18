@@ -69,7 +69,7 @@ public:
     bool horizontalFlip;
 
     Camera realCamera;
-    std::vector<std::pair<std::string, float>> sliders;
+    std::map<std::string, float> sliders;
 
 private:
     void configWindow(glm::vec2 size, glm::vec2 pos, bool inverse = false, bool collapsed = false);

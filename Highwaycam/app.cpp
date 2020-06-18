@@ -71,7 +71,7 @@ void App::renderGUI() {
     
     configWindow({ 400.0f, 200.0f }, { 10.0f, 10.0f });
     ImGui::Begin("Passes");
-    helpMarker("You can drag checkboxes around to reorder passes.");
+    helpMarker("You can drag checkboxes around to reorder passes. Some passes have tweakable variables, which you could adjust in stream settings.");
     
     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
@@ -138,8 +138,9 @@ void App::renderGUI() {
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::SliderInt("Render-Send ratio", &renderSendRatio, 1, 100);
     ImGui::Checkbox("Flip video horizontally", &horizontalFlip);
-    for (int i = 0; i < sliders.size(); i++) {
-        ImGui::SliderFloat(sliders[i].first.c_str(), &sliders[i].second, 0.0f, 1.0f);
+    std::map<std::string, float>::iterator it;
+    for (it = sliders.begin(); it != sliders.end(); it++) {
+        ImGui::SliderFloat(it->first.c_str(), &it->second, 0.0f, 1.0f);
     }
     ImGui::End();
     
@@ -281,8 +282,7 @@ std::pair<bool, Frame> App::readFrame(std::string path) {
     bool activated = false;
     std::string name = path;
     int weight = 0;
-    
-    std::cout << line << std::endl;
+
     Frame frame;
     while (line.rfind("// ", 0) == 0 || line == "") {
         if (line == "" || line.length() <= 3) {
@@ -312,8 +312,8 @@ std::pair<bool, Frame> App::readFrame(std::string path) {
         } else if (key == "warning") {
             warnings.push_back(value);
         } else if (key == "slider") {
-            sliders.push_back(std::pair<std::string, float>(value + " (" + name + ")", 0.0f));
-            frame.bind(value, &sliders[sliders.size() - 1].second);
+            sliders[value] = 0.0f;
+            frame.bind(value, &(sliders[value]));
         }
 
         std::getline(reader, line, '\n');
