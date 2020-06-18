@@ -138,6 +138,9 @@ void App::renderGUI() {
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::SliderInt("Render-Send ratio", &renderSendRatio, 1, 100);
     ImGui::Checkbox("Flip video horizontally", &horizontalFlip);
+    for (int i = 0; i < sliders.size(); i++) {
+        ImGui::SliderFloat(sliders[i].first.c_str(), &sliders[i].second, 0.0f, 1.0f);
+    }
     ImGui::End();
     
     configWindow({ 500.0f, 250.0f }, { 10.0f, 260.0f }, false, true);
@@ -280,6 +283,7 @@ std::pair<bool, Frame> App::readFrame(std::string path) {
     int weight = 0;
     
     std::cout << line << std::endl;
+    Frame frame;
     while (line.rfind("// ", 0) == 0 || line == "") {
         if (line == "" || line.length() <= 3) {
             std::getline(reader, line, '\n');
@@ -307,10 +311,14 @@ std::pair<bool, Frame> App::readFrame(std::string path) {
             }
         } else if (key == "warning") {
             warnings.push_back(value);
+        } else if (key == "slider") {
+            sliders.push_back(std::pair<std::string, float>(value + " (" + name + ")", 0.0f));
+            frame.bind(value, &sliders[sliders.size() - 1].second);
         }
-        
+
         std::getline(reader, line, '\n');
     }
     
-    return std::pair<bool, Frame>(activated, Frame(this, name, path, weight));
+    frame.init(this, name, path, weight);
+    return std::pair<bool, Frame>(activated, frame);
 }

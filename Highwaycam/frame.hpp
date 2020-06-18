@@ -35,7 +35,7 @@ public:
     void initTexture();
     void destroyTexture();
     
-    void bind(std::string uniformName, float value);
+    void bind(std::string uniformName, float *value);
     void bind(std::string uniformName, GLuint value);
     
     Frame &chain(Frame &frame);
@@ -46,6 +46,7 @@ public:
     std::map<std::string, GLuint> uniforms;
     
     std::vector<std::pair<std::string, GLuint> > extraTextures;
+    std::vector<std::pair<std::string, float *> > extraUniforms;
     
     glm::vec2 size;
     GLuint prevPass;

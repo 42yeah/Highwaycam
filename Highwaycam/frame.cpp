@@ -37,6 +37,9 @@ void Frame::renderToScreen(bool retina) {
         glBindTexture(GL_TEXTURE_2D, extraTextures[i].second);
         glUniform1i(uniform(extraTextures[i].first), (i + 1));
     }
+    for (int i = 0; i < extraUniforms.size(); i++) {
+        glUniform1f(uniform(extraUniforms[i].first), *extraUniforms[i].second);
+    }
     glBindVertexArray(VAO);
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
@@ -114,8 +117,8 @@ void Frame::destroyTexture() {
     glDeleteFramebuffers(1, &FBO);
 }
 
-void Frame::bind(std::string uniformName, float value) { 
-    // TODO
+void Frame::bind(std::string uniformName, float *value) {
+    extraUniforms.push_back({ uniformName, value });
 }
 
 void Frame::bind(std::string uniformName, GLuint value) { 
