@@ -73,6 +73,24 @@ void App::renderGUI() {
     ImGui::Begin("Passes");
     helpMarker("You can drag checkboxes around to reorder passes. Some passes have tweakable variables, which you could adjust in stream settings.");
     
+    if (ImGui::Button("Disable all")) {
+        selection.clear();
+        for (int i = 0; i < frames.size(); i++) {
+            selection.push_back(frames[i].first);
+            frames[i].first = false;
+        }
+    }
+    ImGui::SameLine();
+    if (ImGui::Button("Re-enable")) {
+        if (selection.size() != frames.size()) {
+            warnings.push_back("The memory pass size is not equal to current pass size. This will not work.");
+        } else {
+            for (int i = 0; i < selection.size(); i++) {
+                frames[i].first = selection[i];
+            }
+            selection.clear();
+        }
+    }
     ImGui::PushItemFlag(ImGuiItemFlags_Disabled, true);
     ImGui::PushStyleVar(ImGuiStyleVar_Alpha, ImGui::GetStyle().Alpha * 0.5f);
     ImGui::Button("Duplicate"); ImGui::SameLine(); // Just for the asthetics
@@ -144,8 +162,11 @@ void App::renderGUI() {
     }
     ImGui::End();
     
-    configWindow({ 500.0f, 250.0f }, { 10.0f, 260.0f }, false, true);
+    configWindow({ 197.0f, 140.0f }, { 10.0f, winSize.y - 150.0f }, true, false);
     ImGui::Begin("Default camera");
+    ImVec2 pos = ImGui::GetCursorScreenPos();
+    ImVec2 winSize = ImGui::GetWindowSize();
+    ImGui::Image((void *) realCamera.frame.texture, ImVec2(winSize.x - 20.0f, winSize.y - 40.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
     ImGui::End();
 
 //    ImGui::ShowDemoWindow();

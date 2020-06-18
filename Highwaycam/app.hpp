@@ -59,6 +59,7 @@ public:
     float time, lastInstant, deltaTime;
 
     std::vector<std::pair<bool, Frame>> frames;
+    std::vector<bool> selection;
     Server server;
     std::pair<int, unsigned char *> finalImageBuffer;
 
