@@ -37,6 +37,7 @@ public:
     
     void bind(std::string uniformName, float *value);
     void bind(std::string uniformName, GLuint value);
+    void bind(std::string uniformName, bool *value);
     
     Frame &chain(Frame &frame);
     
@@ -47,6 +48,7 @@ public:
     
     std::vector<std::pair<std::string, GLuint> > extraTextures;
     std::vector<std::pair<std::string, float *> > extraUniforms;
+    std::vector<std::pair<std::string, bool *> > extraFlags;
     
     glm::vec2 size;
     GLuint prevPass;

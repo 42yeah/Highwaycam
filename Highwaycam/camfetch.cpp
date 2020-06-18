@@ -31,11 +31,11 @@ cv::Mat &Camera::read() {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getBufferWidth(), getBufferHeight(), 0, GL_RGB, GL_UNSIGNED_BYTE, nullptr);
         frame.bind("rawCamera", cameraTexture);
+        frame.bind("flip", &app->horizontalFlip);
     } else {
         glBindTexture(GL_TEXTURE_2D, cameraTexture);
     }
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, getBufferWidth(), getBufferHeight(), 0, GL_BGR, GL_UNSIGNED_BYTE, getRawMemory());
-    glUniform1i(frame.uniform("flip"), app->horizontalFlip);
     frame.render();
     glBindTexture(GL_TEXTURE_2D, 0);
     
