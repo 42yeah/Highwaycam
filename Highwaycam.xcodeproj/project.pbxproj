@@ -128,6 +128,7 @@
 		F110610A248E078A00A9380F /* stb_image_write.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
 		F110610B248E078A00A9380F /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		F110610C248E14CD00A9380F /* test.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = test.glsl; sourceTree = "<group>"; };
+		F147217F249BB0580073BB18 /* mosaic.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mosaic.glsl; sourceTree = "<group>"; };
 		F147465C2491122500CE9873 /* noisify.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = noisify.glsl; sourceTree = "<group>"; };
 		F14746602491392200CE9873 /* spiral.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = spiral.glsl; sourceTree = "<group>"; };
 		F151A8342495208E0005C926 /* libopencv_rgbd.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_rgbd.dylib; sourceTree = "<group>"; };
@@ -1606,6 +1607,7 @@
 				F147465C2491122500CE9873 /* noisify.glsl */,
 				F14746602491392200CE9873 /* spiral.glsl */,
 				F16637D72496620300BE9D54 /* camera.glsl */,
+				F147217F249BB0580073BB18 /* mosaic.glsl */,
 			);
 			path = Shaders;
 			sourceTree = "<group>";
