@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		18AA36D42487A735004839BC /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 18AA36D32487A735004839BC /* main.cpp */; };
 		2930F4DE2441626200403930 /* Device.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2930F4DD2441626200403930 /* Device.mm */; };
 		2930F4E124417F7E00403930 /* ObjectStore.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2930F4E024417F7E00403930 /* ObjectStore.mm */; };
 		2930F4E4244182FD00403930 /* Stream.mm in Sources */ = {isa = PBXBuildFile; fileRef = 2930F4E3244182FD00403930 /* Stream.mm */; };
@@ -20,6 +19,9 @@
 		29F2123724406AF200805A6D /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29F2123624406AF200805A6D /* CoreVideo.framework */; };
 		29F2123924406AF800805A6D /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29F2123824406AF800805A6D /* CoreGraphics.framework */; };
 		29F2123B24406B0300805A6D /* AppKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29F2123A24406B0300805A6D /* AppKit.framework */; };
+		F105A39724A4E284008FB9C1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F105A39624A4E284008FB9C1 /* main.cpp */; };
+		F105A39C24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F105A39B24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib */; };
+		F105A39D24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = F105A39B24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
 		F151A929249521750005C926 /* camfetch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F151A927249521750005C926 /* camfetch.cpp */; };
 		F151A92C249521C60005C926 /* libopencv_videoio.4.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F151A8752495208F0005C926 /* libopencv_videoio.4.3.0.dylib */; };
 		F151A92D249521C60005C926 /* libopencv_videoio.4.3.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = F151A8752495208F0005C926 /* libopencv_videoio.4.3.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -66,7 +68,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		18AA36CF2487A735004839BC /* CopyFiles */ = {
+		F105A39224A4E284008FB9C1 /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = /usr/share/man/man1/;
@@ -74,6 +76,17 @@
 			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 1;
+		};
+		F105A39E24A4E2B8008FB9C1 /* Embed Libraries */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F105A39D24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib in Embed Libraries */,
+			);
+			name = "Embed Libraries";
+			runOnlyForDeploymentPostprocessing = 0;
 		};
 		F16DB3B7247FFA5900DFE70C /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
@@ -101,8 +114,6 @@
 
 /* Begin PBXFileReference section */
 		18AA36792487A3E3004839BC /* ipc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ipc.h; sourceTree = "<group>"; };
-		18AA36D12487A735004839BC /* IPCTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = IPCTest; sourceTree = BUILT_PRODUCTS_DIR; };
-		18AA36D32487A735004839BC /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 		18CC4FBC2487AC9600B63B28 /* Camera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Camera.entitlements; sourceTree = "<group>"; };
 		2930F4DC2441626200403930 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		2930F4DD2441626200403930 /* Device.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Device.mm; sourceTree = "<group>"; };
@@ -125,6 +136,9 @@
 		29F2123624406AF200805A6D /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		29F2123824406AF800805A6D /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		29F2123A24406B0300805A6D /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
+		F105A39424A4E284008FB9C1 /* RecordTest */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = RecordTest; sourceTree = BUILT_PRODUCTS_DIR; };
+		F105A39624A4E284008FB9C1 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
+		F105A39B24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libgpac.10.0.0.dylib; path = ../../../../../usr/local/Cellar/gpac/1.0.0/lib/libgpac.10.0.0.dylib; sourceTree = "<group>"; };
 		F110610A248E078A00A9380F /* stb_image_write.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
 		F110610B248E078A00A9380F /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		F110610C248E14CD00A9380F /* test.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = test.glsl; sourceTree = "<group>"; };
@@ -565,13 +579,6 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		18AA36CE2487A735004839BC /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		29F2120124402B9300805A6D /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -582,6 +589,14 @@
 				29F21214244031ED00805A6D /* CoreFoundation.framework in Frameworks */,
 				29F21216244031F500805A6D /* CoreMedia.framework in Frameworks */,
 				29F21212244031C300805A6D /* CoreMediaIO.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F105A39124A4E284008FB9C1 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F105A39C24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -598,23 +613,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		18AA36D22487A735004839BC /* IPCTest */ = {
-			isa = PBXGroup;
-			children = (
-				18AA36D32487A735004839BC /* main.cpp */,
-			);
-			path = IPCTest;
-			sourceTree = "<group>";
-		};
 		29F211FB24402B9300805A6D = {
 			isa = PBXGroup;
 			children = (
+				F105A39F24A4E446008FB9C1 /* Attachments */,
 				F16DB4C92480030400DFE70C /* Shaders */,
 				F16DB4C2247FFCD000DFE70C /* README.md */,
 				F16DB3C6247FFB3A00DFE70C /* Ext */,
 				29F2120624402B9300805A6D /* Camera */,
 				F16DB3BA247FFA5900DFE70C /* Highwaycam */,
-				18AA36D22487A735004839BC /* IPCTest */,
+				F105A39524A4E284008FB9C1 /* RecordTest */,
 				29F2120524402B9300805A6D /* Products */,
 				29F21210244031C300805A6D /* Frameworks */,
 			);
@@ -625,7 +633,7 @@
 			children = (
 				29F2120424402B9300805A6D /* Camera.plugin */,
 				F16DB3B9247FFA5900DFE70C /* Highwaycam */,
-				18AA36D12487A735004839BC /* IPCTest */,
+				F105A39424A4E284008FB9C1 /* RecordTest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -655,6 +663,7 @@
 		29F21210244031C300805A6D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F105A39B24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib */,
 				F151A934249528520005C926 /* AVFoundation.framework */,
 				F151A8332495208E0005C926 /* lib */,
 				F16DB3C2247FFB1E00DFE70C /* libglfw.3.3.dylib */,
@@ -666,6 +675,21 @@
 				29F21211244031C300805A6D /* CoreMediaIO.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		F105A39524A4E284008FB9C1 /* RecordTest */ = {
+			isa = PBXGroup;
+			children = (
+				F105A39624A4E284008FB9C1 /* main.cpp */,
+			);
+			path = RecordTest;
+			sourceTree = "<group>";
+		};
+		F105A39F24A4E446008FB9C1 /* Attachments */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Attachments;
 			sourceTree = "<group>";
 		};
 		F151A8332495208E0005C926 /* lib */ = {
@@ -1615,23 +1639,6 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		18AA36D02487A735004839BC /* IPCTest */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 18AA36D52487A735004839BC /* Build configuration list for PBXNativeTarget "IPCTest" */;
-			buildPhases = (
-				18AA36CD2487A735004839BC /* Sources */,
-				18AA36CE2487A735004839BC /* Frameworks */,
-				18AA36CF2487A735004839BC /* CopyFiles */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = IPCTest;
-			productName = IPCTest;
-			productReference = 18AA36D12487A735004839BC /* IPCTest */;
-			productType = "com.apple.product-type.tool";
-		};
 		29F2120324402B9300805A6D /* Camera */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 29F2120A24402B9300805A6D /* Build configuration list for PBXNativeTarget "Camera" */;
@@ -1648,6 +1655,25 @@
 			productName = CMIOMinimalSample;
 			productReference = 29F2120424402B9300805A6D /* Camera.plugin */;
 			productType = "com.apple.product-type.bundle";
+		};
+		F105A39324A4E284008FB9C1 /* RecordTest */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = F105A39824A4E284008FB9C1 /* Build configuration list for PBXNativeTarget "RecordTest" */;
+			buildPhases = (
+				F105A39124A4E284008FB9C1 /* Frameworks */,
+				F105A39224A4E284008FB9C1 /* CopyFiles */,
+				F105A39E24A4E2B8008FB9C1 /* Embed Libraries */,
+				F105A39024A4E284008FB9C1 /* Sources */,
+				F105A3A024A4E474008FB9C1 /* ShellScript */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = RecordTest;
+			productName = RecordTest;
+			productReference = F105A39424A4E284008FB9C1 /* RecordTest */;
+			productType = "com.apple.product-type.tool";
 		};
 		F16DB3B8247FFA5900DFE70C /* Highwaycam */ = {
 			isa = PBXNativeTarget;
@@ -1678,11 +1704,11 @@
 				LastUpgradeCheck = 1140;
 				ORGANIZATIONNAME = "John Boiles ";
 				TargetAttributes = {
-					18AA36D02487A735004839BC = {
-						CreatedOnToolsVersion = 11.5;
-					};
 					29F2120324402B9300805A6D = {
 						CreatedOnToolsVersion = 11.4;
+					};
+					F105A39324A4E284008FB9C1 = {
+						CreatedOnToolsVersion = 11.5;
 					};
 					F16DB3B8247FFA5900DFE70C = {
 						CreatedOnToolsVersion = 11.5;
@@ -1714,7 +1740,7 @@
 			targets = (
 				29F2120324402B9300805A6D /* Camera */,
 				F16DB3B8247FFA5900DFE70C /* Highwaycam */,
-				18AA36D02487A735004839BC /* IPCTest */,
+				F105A39324A4E284008FB9C1 /* RecordTest */,
 			);
 		};
 /* End PBXProject section */
@@ -1754,6 +1780,23 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
+		F105A3A024A4E474008FB9C1 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -rf ${BUILT_PRODUCTS_DIR}/Attachments\ncp -r ${SRCROOT}/Attachments ${BUILT_PRODUCTS_DIR}\n";
+		};
 		F16DB4CA2480030F00DFE70C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -1774,14 +1817,6 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		18AA36CD2487A735004839BC /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				18AA36D42487A735004839BC /* main.cpp in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		29F2120024402B9300805A6D /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1792,6 +1827,14 @@
 				2930F4DE2441626200403930 /* Device.mm in Sources */,
 				2930F4E124417F7E00403930 /* ObjectStore.mm in Sources */,
 				2930F4E4244182FD00403930 /* Stream.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		F105A39024A4E284008FB9C1 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				F105A39724A4E284008FB9C1 /* main.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1837,30 +1880,6 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
-		18AA36D62487A735004839BC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KL2JALR869;
-				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
-				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.ipctest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Debug;
-		};
-		18AA36D72487A735004839BC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = KL2JALR869;
-				ENABLE_HARDENED_RUNTIME = YES;
-				HEADER_SEARCH_PATHS = "$(SRCROOT)/Ext";
-				PRODUCT_BUNDLE_IDENTIFIER = me.42yeah.ipctest;
-				PRODUCT_NAME = "$(TARGET_NAME)";
-			};
-			name = Release;
-		};
 		29F2120824402B9300805A6D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2008,6 +2027,26 @@
 			};
 			name = Release;
 		};
+		F105A39924A4E284008FB9C1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /usr/local/Cellar/gpac/1.0.0/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/gpac/1.0.0/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		F105A39A24A4E284008FB9C1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				HEADER_SEARCH_PATHS = /usr/local/Cellar/gpac/1.0.0/include;
+				LIBRARY_SEARCH_PATHS = /usr/local/Cellar/gpac/1.0.0/lib;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		F16DB3BE247FFA5900DFE70C /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2065,15 +2104,6 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		18AA36D52487A735004839BC /* Build configuration list for PBXNativeTarget "IPCTest" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				18AA36D62487A735004839BC /* Debug */,
-				18AA36D72487A735004839BC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
 		29F211FF24402B9300805A6D /* Build configuration list for PBXProject "Highwaycam" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
@@ -2088,6 +2118,15 @@
 			buildConfigurations = (
 				29F2120B24402B9300805A6D /* Debug */,
 				29F2120C24402B9300805A6D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		F105A39824A4E284008FB9C1 /* Build configuration list for PBXNativeTarget "RecordTest" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F105A39924A4E284008FB9C1 /* Debug */,
+				F105A39A24A4E284008FB9C1 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

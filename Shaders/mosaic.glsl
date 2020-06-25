@@ -21,4 +21,3 @@ void main() {
     xy.y = floor(xy.y * m) / m;
     color = texture(prevPass, xy);
 }
-
