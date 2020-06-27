@@ -153,6 +153,11 @@ void App::renderGUI() {
     
     configWindow({ 400.0f, 250.0f }, { 10.0f, 240.0f }, false, true);
     ImGui::Begin("Stream settings");
+    std::string pauseMsg = "Pause video recording";
+    if (realCamera.paused) { pauseMsg = "Resume video recording"; }
+    if (ImGui::Button(pauseMsg.c_str())) {
+        realCamera.paused = !realCamera.paused;
+    }
     ImGui::SliderInt("Video quality", &compressQuality, 1, 100);
     ImGui::SliderInt("Render-Send ratio", &renderSendRatio, 1, 100);
     ImGui::Checkbox("Flip video horizontally", &horizontalFlip);

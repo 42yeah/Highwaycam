@@ -11,7 +11,7 @@
 #include <glad/glad.h>
 
 
-Camera::Camera(App *app, int id) : app(app), cameraTexture(0), ready(false) {
+Camera::Camera(App *app, int id) : app(app), cameraTexture(0), ready(false), paused(false) {
     cap.open(id + cv::CAP_ANY);
     cap.read(buffer);
     cap.set(3, getBufferWidth() / 2);
@@ -23,7 +23,7 @@ Camera::Camera(App *app, int id) : app(app), cameraTexture(0), ready(false) {
 
 cv::Mat &Camera::read() {
     if (!ready) { return buffer; }
-    cap.read(buffer);
+    if (!paused) { cap.read(buffer); }
     if (!cameraTexture) {
         glGenTextures(1, &cameraTexture);
         glBindTexture(GL_TEXTURE_2D, cameraTexture);

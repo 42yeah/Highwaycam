@@ -27,6 +27,7 @@ public:
     App *app;
     Frame frame;
     bool ready;
+    bool paused;
 
 private:
     cv::VideoCapture cap;
