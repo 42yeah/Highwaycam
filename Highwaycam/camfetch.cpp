@@ -12,6 +12,10 @@
 
 
 Camera::Camera(App *app, int id) : app(app), cameraTexture(0), ready(false), paused(false) {
+    init(app, id);
+}
+
+void Camera::init(App *app, int id) {
     cap.open(id + cv::CAP_ANY);
     cap.read(buffer);
     cap.set(3, getBufferWidth() / 2);

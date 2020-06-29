@@ -18,6 +18,8 @@ public:
     Camera() : ready(false) {}
     Camera(App *app, int id);
     
+    void init(App *app, int id);
+    
     cv::Mat &read();
     void *getRawMemory();
     int getBufferWidth();

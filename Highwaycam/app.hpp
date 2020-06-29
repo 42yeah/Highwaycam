@@ -26,6 +26,7 @@
 #include "frame.hpp"
 #include "server.hpp"
 #include "camfetch.hpp"
+#include "resource.hpp"
 
 
 class App {
@@ -48,6 +49,8 @@ public:
     
     void updateFrames();
     
+    void updateResources();
+    
     std::pair<bool, Frame> readFrame(std::string path);
     
     // Borrowed from ImGui_Demo
@@ -59,6 +62,7 @@ public:
     float time, lastInstant, deltaTime;
 
     std::vector<std::pair<bool, Frame>> frames;
+    std::vector<Resource> resources;
     std::vector<bool> selection;
     Server server;
     std::pair<int, unsigned char *> finalImageBuffer;

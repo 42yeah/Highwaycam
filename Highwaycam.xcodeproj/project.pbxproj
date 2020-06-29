@@ -22,6 +22,8 @@
 		F105A39724A4E284008FB9C1 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F105A39624A4E284008FB9C1 /* main.cpp */; };
 		F105A39C24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F105A39B24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib */; };
 		F105A39D24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = F105A39B24A4E2B8008FB9C1 /* libgpac.10.0.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
+		F131B92F24A7A22B0000BB3D /* resource.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F131B92D24A7A22B0000BB3D /* resource.cpp */; };
+		F131B93224A7B1960000BB3D /* test.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = F131B93124A7B1960000BB3D /* test.mp4 */; };
 		F151A929249521750005C926 /* camfetch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F151A927249521750005C926 /* camfetch.cpp */; };
 		F151A92C249521C60005C926 /* libopencv_videoio.4.3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F151A8752495208F0005C926 /* libopencv_videoio.4.3.0.dylib */; };
 		F151A92D249521C60005C926 /* libopencv_videoio.4.3.0.dylib in Embed Libraries */ = {isa = PBXBuildFile; fileRef = F151A8752495208F0005C926 /* libopencv_videoio.4.3.0.dylib */; settings = {ATTRIBUTES = (CodeSignOnCopy, ); }; };
@@ -142,6 +144,10 @@
 		F110610A248E078A00A9380F /* stb_image_write.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image_write.h; sourceTree = "<group>"; };
 		F110610B248E078A00A9380F /* stb_image.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = stb_image.h; sourceTree = "<group>"; };
 		F110610C248E14CD00A9380F /* test.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = test.glsl; sourceTree = "<group>"; };
+		F131B92D24A7A22B0000BB3D /* resource.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = resource.cpp; sourceTree = "<group>"; };
+		F131B92E24A7A22B0000BB3D /* resource.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = resource.hpp; sourceTree = "<group>"; };
+		F131B93124A7B1960000BB3D /* test.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = test.mp4; sourceTree = "<group>"; };
+		F131B93324A7B31E0000BB3D /* Highwaycam.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Highwaycam.entitlements; sourceTree = "<group>"; };
 		F147217F249BB0580073BB18 /* mosaic.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = mosaic.glsl; sourceTree = "<group>"; };
 		F147465C2491122500CE9873 /* noisify.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = noisify.glsl; sourceTree = "<group>"; };
 		F14746602491392200CE9873 /* spiral.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = spiral.glsl; sourceTree = "<group>"; };
@@ -379,7 +385,6 @@
 		F151A9242495208F0005C926 /* libopencv_aruco.4.3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; path = libopencv_aruco.4.3.dylib; sourceTree = "<group>"; };
 		F151A927249521750005C926 /* camfetch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = camfetch.cpp; sourceTree = "<group>"; };
 		F151A928249521750005C926 /* camfetch.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = camfetch.hpp; sourceTree = "<group>"; };
-		F151A9302495226C0005C926 /* Highwaycam.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Highwaycam.entitlements; sourceTree = "<group>"; };
 		F151A933249524310005C926 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F151A934249528520005C926 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		F16637D72496620300BE9D54 /* camera.glsl */ = {isa = PBXFileReference; lastKnownFileType = text; path = camera.glsl; sourceTree = "<group>"; };
@@ -616,7 +621,7 @@
 		29F211FB24402B9300805A6D = {
 			isa = PBXGroup;
 			children = (
-				F105A39F24A4E446008FB9C1 /* Attachments */,
+				F131B93024A7B1960000BB3D /* Resources */,
 				F16DB4C92480030400DFE70C /* Shaders */,
 				F16DB4C2247FFCD000DFE70C /* README.md */,
 				F16DB3C6247FFB3A00DFE70C /* Ext */,
@@ -685,11 +690,12 @@
 			path = RecordTest;
 			sourceTree = "<group>";
 		};
-		F105A39F24A4E446008FB9C1 /* Attachments */ = {
+		F131B93024A7B1960000BB3D /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				F131B93124A7B1960000BB3D /* test.mp4 */,
 			);
-			path = Attachments;
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		F151A8332495208E0005C926 /* lib */ = {
@@ -1007,7 +1013,7 @@
 		F16DB3BA247FFA5900DFE70C /* Highwaycam */ = {
 			isa = PBXGroup;
 			children = (
-				F151A9302495226C0005C926 /* Highwaycam.entitlements */,
+				F131B93324A7B31E0000BB3D /* Highwaycam.entitlements */,
 				F151A927249521750005C926 /* camfetch.cpp */,
 				F151A928249521750005C926 /* camfetch.hpp */,
 				F16DB3BB247FFA5900DFE70C /* main.cpp */,
@@ -1020,6 +1026,8 @@
 				F16DB4D22480161E00DFE70C /* server.cpp */,
 				F16DB4D32480161E00DFE70C /* server.hpp */,
 				F151A933249524310005C926 /* Info.plist */,
+				F131B92D24A7A22B0000BB3D /* resource.cpp */,
+				F131B92E24A7A22B0000BB3D /* resource.hpp */,
 			);
 			path = Highwaycam;
 			sourceTree = "<group>";
@@ -1774,6 +1782,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F131B93224A7B1960000BB3D /* test.mp4 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1812,7 +1821,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -rf ${BUILT_PRODUCTS_DIR}/Shaders\ncp -r ${SRCROOT}/Shaders ${BUILT_PRODUCTS_DIR}\ncp -r ${SRCROOT}/Highwaycam/Info.plist ${BUILT_PRODUCTS_DIR}\n";
+			shellScript = "rm -rf ${BUILT_PRODUCTS_DIR}/Shaders\ncp -r ${SRCROOT}/Shaders ${BUILT_PRODUCTS_DIR}\nrm -rf ${BUILT_PRODUCTS_DIR}/Resources\ncp -r ${SRCROOT}/Resources ${BUILT_PRODUCTS_DIR}\ncp -r ${SRCROOT}/Highwaycam/Info.plist ${BUILT_PRODUCTS_DIR}\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1843,6 +1852,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F16DB4C5247FFD3C00DFE70C /* program.cpp in Sources */,
+				F131B92F24A7A22B0000BB3D /* resource.cpp in Sources */,
 				F16DB4C1247FFBAA00DFE70C /* imgui_draw.cpp in Sources */,
 				F16DB4C0247FFB9A00DFE70C /* imgui_impl_opengl3.cpp in Sources */,
 				F16DB4BF247FFB9000DFE70C /* imgui_stdlib.cpp in Sources */,

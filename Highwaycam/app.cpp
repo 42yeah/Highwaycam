@@ -26,6 +26,7 @@ App::App(GLFWwindow *window) : window(window), time(0.0f), server(this), compres
     finalImageBuffer.second = new unsigned char[finalImageBuffer.first]; // RGB * W * H
     realCamera = Camera(this, 1);
     updateFrames();
+    updateResources();
     numFramesRendered = 0;
 }
 
@@ -169,7 +170,6 @@ void App::renderGUI() {
     
     configWindow({ 197.0f, 140.0f }, { 10.0f, winSize.y - 150.0f }, true, false);
     ImGui::Begin("Default camera");
-    ImVec2 pos = ImGui::GetCursorScreenPos();
     ImVec2 winSize = ImGui::GetWindowSize();
     ImGui::Image((void *) realCamera.frame.texture, ImVec2(winSize.x - 20.0f, winSize.y - 40.0f), ImVec2(0.0f, 1.0f), ImVec2(1.0f, 0.0f));
     ImGui::End();
@@ -347,4 +347,13 @@ std::pair<bool, Frame> App::readFrame(std::string path) {
     
     frame.init(this, name, path, weight);
     return std::pair<bool, Frame>(activated, frame);
+}
+
+void App::updateResources() { 
+    namespace fs = std::__fs::filesystem;
+    for (const auto &entry : fs::directory_iterator("Resources")) {
+        std::string name = entry.path().filename().string();
+        Resource resource(this, name, entry.path().string());
+        resources.push_back(resource);
+    }
 }
