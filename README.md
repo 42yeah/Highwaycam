@@ -22,9 +22,9 @@ Currently implemented features:
 
 (Kinda) development roadmap:
 
-[ ] Texture list
-[ ] Record video
-[ ] Custom video as input
+- [ ] Texture list
+- [ ] Record video
+- [ ] Custom video as input
 
 ### Libraries
 
