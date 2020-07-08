@@ -115,7 +115,6 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		18AA36792487A3E3004839BC /* ipc.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ipc.h; sourceTree = "<group>"; };
 		18CC4FBC2487AC9600B63B28 /* Camera.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Camera.entitlements; sourceTree = "<group>"; };
 		2930F4DC2441626200403930 /* Device.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Device.h; sourceTree = "<group>"; };
 		2930F4DD2441626200403930 /* Device.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = Device.mm; sourceTree = "<group>"; };
@@ -1037,7 +1036,6 @@
 			children = (
 				F110610A248E078A00A9380F /* stb_image_write.h */,
 				F110610B248E078A00A9380F /* stb_image.h */,
-				18AA36792487A3E3004839BC /* ipc.h */,
 				F16DB3C7247FFB3A00DFE70C /* imgui */,
 				F16DB4A9247FFB3A00DFE70C /* glad */,
 			);
